@@ -1,0 +1,7 @@
+<Solution>
+  <Project Path="ResourceHub.API/ResourceHub.API.csproj" />
+  <Project Path="ResourceHub.Application/ResourceHub.Application.csproj" />
+  <Project Path="ResourceHub.Domain/ResourceHub.Domain.csproj" />
+  <Project Path="ResourceHub.Infrastructure/ResourceHub.Infrastructure.csproj" />
+  <Project Path="ResourceHub.Service/ResourceHub.Service.csproj" />
+</Solution>
