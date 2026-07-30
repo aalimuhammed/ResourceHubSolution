@@ -1,8 +1,14 @@
+using ResourceHub.Infrastructure.Extenions;
+
 var builder = WebApplication.CreateBuilder(args);
 
 // Add services to the container.
 
+builder.Services.AddInfarstructureService(builder.Configuration);
+
 builder.Services.AddControllers();
+
+
 
 var app = builder.Build();
 
