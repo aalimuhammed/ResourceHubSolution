@@ -364,3 +364,5 @@ FodyWeavers.xsd
 
 /ResourceHub.Service/appsettings.json
 /ResourceHub.API/appsettings.json
+/ResourceHub.API/appsettings.json
+/ResourceHub.Service/appsettings.json
