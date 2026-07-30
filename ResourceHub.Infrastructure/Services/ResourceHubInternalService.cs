@@ -65,7 +65,7 @@ namespace ResourceHub.Infrastructure.Services
                 }
 
 
-                await _unitOfWork.SaveChanges(cancellationToken);
+                await _unitOfWork.SaveChangesAsync(cancellationToken);
 
                 if (!result.HasMore)
                 {

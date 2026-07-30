@@ -1,7 +1,7 @@
 ﻿using ResourceHub.Application.Interfaces;
 using ResourceHub.Infrastructure.Contexts;
 
-namespace ResourceHub.Infrastructure.UOK
+namespace ResourceHub.Infrastructure.UOW
 {
     public class UnitOfWork : IUnitOfWork
     {
@@ -12,9 +12,9 @@ namespace ResourceHub.Infrastructure.UOK
             _context = context;
         }
 
-        public async Task<int> SaveChanges(CancellationToken cancellationToken)
+        public async Task<int> SaveChangesAsync(CancellationToken cancellationToken)
         {
-            return await _context.SaveChangesAsync();
+            return await _context.SaveChangesAsync(cancellationToken);
         }
     }
 }

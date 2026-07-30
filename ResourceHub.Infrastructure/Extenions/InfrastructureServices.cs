@@ -5,7 +5,7 @@ using Microsoft.Extensions.Options;
 using ResourceHub.Application.Interfaces;
 using ResourceHub.Infrastructure.Contexts;
 using ResourceHub.Infrastructure.Services;
-using ResourceHub.Infrastructure.UOK;
+using ResourceHub.Infrastructure.UOW;
 
 namespace ResourceHub.Infrastructure.Extenions
 {

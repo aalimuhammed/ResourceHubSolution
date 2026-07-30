@@ -9,7 +9,6 @@ namespace ResourceHub.Domain.Entities
     {
         [Key]
         public Guid Id { get; set; } = Guid.CreateVersion7();
-        // [Key]
         public string ActivityNo { get; set; } = null!;
         public string CreatedOn { get; set; } = null!;
         public string CreatedBy { get; set; } = null!;

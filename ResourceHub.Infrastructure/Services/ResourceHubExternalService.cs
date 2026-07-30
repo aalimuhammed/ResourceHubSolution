@@ -28,32 +28,28 @@ namespace ResourceHub.Infrastructure.Services
             var byteArray = System.Text.Encoding.ASCII.GetBytes($"{_settings.Value.UserName}:{_settings.Value.Password}");
             _httpClient.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Basic", Convert.ToBase64String(byteArray));
         }
-        public async Task<ServicePageResult> GetServicePageAsync(int pageNumber, int pageSize , CancellationToken cancellationToken)
+        async Task<ServicePageResult> IResourceHubExternalService.GetServicePageAsync(int pageNumber, int pageSize, CancellationToken cancellationToken)
         {
-            var skip=(pageNumber - 1) * pageSize;
+            var skip = (pageNumber - 1) * pageSize;
             var top = pageSize;
 
             var url = _settings.Value.SapUrl.ToString()!
                 .Replace("{skip}", skip.ToString())
                 .Replace("{top}", top.ToString());
 
-            var httpResponse =await _httpClient.GetAsync(url);
-            
+            var httpResponse = await _httpClient.GetAsync(url);
+
             httpResponse.EnsureSuccessStatusCode();
 
             var content = await httpResponse.Content.ReadAsStringAsync(cancellationToken);
             var services = JsonConvert.DeserializeObject<ICollection<ServiceDto>>(content)!;
-
-            //var services = await httpResponse.Content
-            //.ReadFromJsonAsync<ICollection<ServiceDto>>(
-            //);
 
             var hasMore = httpResponse.Headers.TryGetValues("x-has-more", out var hasMoreValues)
                 && hasMoreValues.FirstOrDefault()?.Equals("true", StringComparison.OrdinalIgnoreCase) == true;
 
             return new ServicePageResult
             {
-                Services = services ,
+                Services = services,
                 HasMore = hasMore
             };
         }

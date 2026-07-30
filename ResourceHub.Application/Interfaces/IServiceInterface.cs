@@ -7,6 +7,6 @@ namespace ResourceHub.Application.Interfaces
 {
     public interface IServiceInterface
     {
-        public Task<ICollection<ServiceDto>>GetAll();
+         Task<ICollection<ServiceDto>>GetAll(CancellationToken cancellationToken);
     }
 }

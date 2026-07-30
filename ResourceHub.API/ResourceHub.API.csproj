@@ -17,4 +17,8 @@
     <ProjectReference Include="..\ResourceHub.Infrastructure\ResourceHub.Infrastructure.csproj" />
   </ItemGroup>
 
+  <ItemGroup>
+    <Folder Include="Controllers\" />
+  </ItemGroup>
+
 </Project>

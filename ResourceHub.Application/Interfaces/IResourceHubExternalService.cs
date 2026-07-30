@@ -7,6 +7,6 @@ namespace ResourceHub.Application.Interfaces
 {
     public interface IResourceHubExternalService
     {
-        public Task<ServicePageResult> GetServicePageAsync( int pageNumber, int pageSize, CancellationToken cancellationToken);
+         Task<ServicePageResult> GetServicePageAsync( int pageNumber, int pageSize, CancellationToken cancellationToken);
     }
 }
