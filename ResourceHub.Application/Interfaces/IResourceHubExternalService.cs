@@ -1,12 +1,12 @@
 ﻿using ResourceHub.Application.Dtos;
-using System;
-using System.Collections.Generic;
-using System.Text;
 
 namespace ResourceHub.Application.Interfaces
 {
     public interface IResourceHubExternalService
     {
-         Task<ServicePageResult> GetServicePageAsync( int pageNumber, int pageSize, CancellationToken cancellationToken);
+         Task<ServicePageResult> GetServicePageAsync(
+             int pageNumber,
+             int pageSize, 
+             CancellationToken cancellationToken = default);
     }
 }

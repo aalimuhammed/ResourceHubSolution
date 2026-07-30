@@ -7,9 +7,13 @@ namespace ResourceHub.Infrastructure.Services
 {
     public class ResourceHubInternalService : IResourceHubInternalService
     {
+
         private readonly IResourceHubExternalService _resourceHubExternalService;
+
         private readonly ResourceHubDbContext _context;
+
         private readonly IUnitOfWork _unitOfWork;
+
         public ResourceHubInternalService(
             IResourceHubExternalService resourceHubExternalService ,
             ResourceHubDbContext context,
@@ -72,10 +76,7 @@ namespace ResourceHub.Infrastructure.Services
                     break;
                 }
                 pagenumber++;
-
             }
-
-
         }
     }
 }

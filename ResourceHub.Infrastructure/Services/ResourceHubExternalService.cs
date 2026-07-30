@@ -19,7 +19,9 @@ namespace ResourceHub.Infrastructure.Services
     public class ResourceHubExternalService : IResourceHubExternalService
     {
         private readonly HttpClient _httpClient;
+
         private readonly IOptions<SapSettings> _settings;
+
 
         public ResourceHubExternalService(HttpClient httpClient ,IOptions<SapSettings>options)
         {
@@ -28,7 +30,7 @@ namespace ResourceHub.Infrastructure.Services
             var byteArray = System.Text.Encoding.ASCII.GetBytes($"{_settings.Value.UserName}:{_settings.Value.Password}");
             _httpClient.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Basic", Convert.ToBase64String(byteArray));
         }
-        async Task<ServicePageResult> IResourceHubExternalService.GetServicePageAsync(int pageNumber, int pageSize, CancellationToken cancellationToken)
+        public async Task<ServicePageResult> GetServicePageAsync(int pageNumber, int pageSize, CancellationToken cancellationToken)
         {
             var skip = (pageNumber - 1) * pageSize;
             var top = pageSize;
@@ -37,7 +39,7 @@ namespace ResourceHub.Infrastructure.Services
                 .Replace("{skip}", skip.ToString())
                 .Replace("{top}", top.ToString());
 
-            var httpResponse = await _httpClient.GetAsync(url);
+            var httpResponse = await _httpClient.GetAsync(url,cancellationToken);
 
             httpResponse.EnsureSuccessStatusCode();
 
