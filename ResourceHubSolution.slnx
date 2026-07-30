@@ -1,7 +1,4 @@
 <Solution>
-  <Folder Name="/Solution Items/">
-    <File Path=".gtignore" />
-  </Folder>
   <Project Path="ResourceHub.API/ResourceHub.API.csproj" />
   <Project Path="ResourceHub.Application/ResourceHub.Application.csproj" />
   <Project Path="ResourceHub.Domain/ResourceHub.Domain.csproj" />

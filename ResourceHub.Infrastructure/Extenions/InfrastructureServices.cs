@@ -1,7 +1,6 @@
 ﻿using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
-using Microsoft.Extensions.Options;
 using ResourceHub.Application.Interfaces;
 using ResourceHub.Infrastructure.Contexts;
 using ResourceHub.Infrastructure.Services;
@@ -18,7 +17,8 @@ namespace ResourceHub.Infrastructure.Extenions
             var connectionString = configuration.GetConnectionString("DefaultConnection");
 
             services.AddDbContext<ResourceHubDbContext>(options =>
-            options.UseMySql(connectionString, ServerVersion.AutoDetect(connectionString)));
+            options.UseMySql(connectionString, ServerVersion.AutoDetect(connectionString))
+               .UseSnakeCaseNamingConvention());
 
             services.AddHttpClient<IResourceHubExternalService, ResourceHubExternalService>();
 

@@ -7,15 +7,11 @@ namespace ResourceHub.Infrastructure.Services
 {
     public class ResourceHubInternalService : IResourceHubInternalService
     {
-
         private readonly IResourceHubExternalService _resourceHubExternalService;
-
         private readonly ResourceHubDbContext _context;
-
         private readonly IUnitOfWork _unitOfWork;
-
         public ResourceHubInternalService(
-            IResourceHubExternalService resourceHubExternalService ,
+            IResourceHubExternalService resourceHubExternalService,
             ResourceHubDbContext context,
             IUnitOfWork unitOfWork)
         {
@@ -23,59 +19,60 @@ namespace ResourceHub.Infrastructure.Services
             _context = context;
             _unitOfWork = unitOfWork;
         }
-        public async Task ImportFromSapAsync(CancellationToken cancellationToken=default)
+        public async Task ImportFromSapAsync(
+            CancellationToken cancellationToken = default)
         {
-            int pagenumber = 1;
-            int pagesize = 100;
+            const int pageSize = 100;
 
-            while(true)
+            int pageNumber = 1;
+            int totalPages = 0;
+
+            var existingActivityNos = await _context.Services
+                .Select(x => x.ActivityNo)
+                .ToHashSetAsync(cancellationToken);
+
+            while (pageNumber <= totalPages || totalPages == 0)
             {
-                var result = await _resourceHubExternalService.GetServicePageAsync(pagenumber , pagesize , cancellationToken);
-   
-                var dto = result.Services;
+                var result = await _resourceHubExternalService.GetServicePageAsync(
+                    pageNumber,
+                    pageSize,
+                    cancellationToken);
 
-                foreach (var servicedto in dto)
+                if (totalPages == 0)
                 {
-                    var isExist = await _context.Services.FirstOrDefaultAsync(
-                        x => x.ActivityNo == servicedto.ActivityNo,
-                        cancellationToken);
-
-                    if (isExist != null)
-                    {
-                        continue;
-                    }
-                    else
-                    {
-                        Service service = new Service()
-                        {
-                            ActivityNo = servicedto.ActivityNo,
-                            ChangedBy = servicedto.ChangedBy,
-                            MaterialGroup = servicedto.MaterialGroup,
-                            LongTxt = servicedto.LongTxt,
-                            ChangedOn = servicedto.ChangedOn,
-                            DeletionInd = servicedto.DeletionInd,
-                            CreatedBy = servicedto.CreatedBy,
-                            CreatedOn = servicedto.CreatedOn,
-                            Division = servicedto.Division,
-                            PrimaryLang = servicedto.PrimaryLang,
-                            ServiceCat = servicedto.ServiceCat,
-                            ShortTxt = servicedto.ShortTxt,
-                            Unit = servicedto.Unit,
-                            ValuationClass = servicedto.ValuationClass,
-                        };
-
-                        _context.Services.Add(service);
-                    }
+                    totalPages = (int)Math.Ceiling(
+                        (double)result.TotalCount / pageSize);
                 }
 
+
+                foreach (var dto in result.Services)
+                {
+                    // Skip duplicates already in DB or previous pages
+                    if (!existingActivityNos.Add(dto.ActivityNo))
+                        continue;
+
+                    _context.Services.Add(new Service
+                    {
+                        ActivityNo = dto.ActivityNo,
+                        ChangedBy = dto.ChangedBy,
+                        MaterialGroup = dto.MaterialGroup,
+                        LongTxt = dto.LongTxt,
+                        ChangedOn = dto.ChangedOn,
+                        DeletionInd = dto.DeletionInd,
+                        CreatedBy = dto.CreatedBy,
+                        CreatedOn = dto.CreatedOn,
+                        Division = dto.Division,
+                        PrimaryLang = dto.PrimaryLang,
+                        ServiceCat = dto.ServiceCat,
+                        ShortTxt = dto.ShortTxt,
+                        Unit = dto.Unit,
+                        ValuationClass = dto.ValuationClass
+                    });
+                }
 
                 await _unitOfWork.SaveChangesAsync(cancellationToken);
 
-                if (!result.HasMore)
-                {
-                    break;
-                }
-                pagenumber++;
+                pageNumber++;
             }
         }
     }

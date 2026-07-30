@@ -1,14 +1,9 @@
-﻿using System;
-using System.Collections.Generic;
-using System.ComponentModel.DataAnnotations;
-using System.Text;
+﻿using ResourceHub.Domain.Base;
 
 namespace ResourceHub.Domain.Entities
 {
-    public class Service
+    public class Service : BaseEntity
     {
-        [Key]
-        public Guid Id { get; set; } = Guid.CreateVersion7();
         public string ActivityNo { get; set; } = null!;
         public string CreatedOn { get; set; } = null!;
         public string CreatedBy { get; set; } = null!;

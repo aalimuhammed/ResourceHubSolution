@@ -32,4 +32,3 @@ var importer = scope.ServiceProvider
     .GetRequiredService<IResourceHubInternalService>();
 
 await importer.ImportFromSapAsync();
-

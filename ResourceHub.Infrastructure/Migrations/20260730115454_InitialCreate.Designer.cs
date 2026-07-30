@@ -12,8 +12,8 @@ using ResourceHub.Infrastructure.Contexts;
 namespace ResourceHub.Infrastructure.Migrations
 {
     [DbContext(typeof(ResourceHubDbContext))]
-    [Migration("20260729120925_InitialMigration")]
-    partial class InitialMigration
+    [Migration("20260730115454_InitialCreate")]
+    partial class InitialCreate
     {
         /// <inheritdoc />
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -29,66 +29,86 @@ namespace ResourceHub.Infrastructure.Migrations
                 {
                     b.Property<Guid>("Id")
                         .ValueGeneratedOnAdd()
-                        .HasColumnType("char(36)");
+                        .HasColumnType("char(36)")
+                        .HasColumnName("id");
 
                     b.Property<string>("ActivityNo")
                         .IsRequired()
-                        .HasColumnType("longtext");
+                        .HasColumnType("longtext")
+                        .HasColumnName("activity_no");
 
                     b.Property<string>("ChangedBy")
                         .IsRequired()
-                        .HasColumnType("longtext");
+                        .HasColumnType("longtext")
+                        .HasColumnName("changed_by");
 
                     b.Property<string>("ChangedOn")
                         .IsRequired()
-                        .HasColumnType("longtext");
+                        .HasColumnType("longtext")
+                        .HasColumnName("changed_on");
+
+                    b.Property<DateTime>("CreatedAt")
+                        .HasColumnType("datetime(6)")
+                        .HasColumnName("created_at");
 
                     b.Property<string>("CreatedBy")
                         .IsRequired()
-                        .HasColumnType("longtext");
+                        .HasColumnType("longtext")
+                        .HasColumnName("created_by");
 
                     b.Property<string>("CreatedOn")
                         .IsRequired()
-                        .HasColumnType("longtext");
+                        .HasColumnType("longtext")
+                        .HasColumnName("created_on");
 
                     b.Property<bool>("DeletionInd")
-                        .HasColumnType("tinyint(1)");
+                        .HasColumnType("tinyint(1)")
+                        .HasColumnName("deletion_ind");
 
                     b.Property<string>("Division")
                         .IsRequired()
-                        .HasColumnType("longtext");
+                        .HasColumnType("longtext")
+                        .HasColumnName("division");
 
                     b.Property<string>("LongTxt")
                         .IsRequired()
-                        .HasColumnType("longtext");
+                        .HasColumnType("longtext")
+                        .HasColumnName("long_txt");
 
                     b.Property<string>("MaterialGroup")
                         .IsRequired()
-                        .HasColumnType("longtext");
+                        .HasColumnType("longtext")
+                        .HasColumnName("material_group");
 
                     b.Property<string>("PrimaryLang")
                         .IsRequired()
-                        .HasColumnType("longtext");
+                        .HasColumnType("longtext")
+                        .HasColumnName("primary_lang");
 
                     b.Property<string>("ServiceCat")
                         .IsRequired()
-                        .HasColumnType("longtext");
+                        .HasColumnType("longtext")
+                        .HasColumnName("service_cat");
 
                     b.Property<string>("ShortTxt")
                         .IsRequired()
-                        .HasColumnType("longtext");
+                        .HasColumnType("longtext")
+                        .HasColumnName("short_txt");
 
                     b.Property<string>("Unit")
                         .IsRequired()
-                        .HasColumnType("longtext");
+                        .HasColumnType("longtext")
+                        .HasColumnName("unit");
 
                     b.Property<string>("ValuationClass")
                         .IsRequired()
-                        .HasColumnType("longtext");
+                        .HasColumnType("longtext")
+                        .HasColumnName("valuation_class");
 
-                    b.HasKey("Id");
+                    b.HasKey("Id")
+                        .HasName("pk_services");
 
-                    b.ToTable("Services");
+                    b.ToTable("services", (string)null);
                 });
 #pragma warning restore 612, 618
         }

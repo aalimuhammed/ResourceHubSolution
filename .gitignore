@@ -362,5 +362,5 @@ MigrationBackup/
 # Fody - auto-generated XML schema
 FodyWeavers.xsd
 
-ResourceHub.API/appsettings.json
-ResourceHub.Service/appsettings.json
+/ResourceHub.Service/appsettings.json
+/ResourceHub.API/appsettings.json
