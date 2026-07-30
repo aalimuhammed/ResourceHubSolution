@@ -39,7 +39,7 @@ namespace ResourceHub.Infrastructure.Services
                 .Replace("{skip}", skip.ToString())
                 .Replace("{top}", top.ToString());
 
-            var httpResponse = await _httpClient.GetAsync(url,cancellationToken);
+            var httpResponse = await _httpClient.GetAsync(url , cancellationToken);
 
             httpResponse.EnsureSuccessStatusCode();
 
