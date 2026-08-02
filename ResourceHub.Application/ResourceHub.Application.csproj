@@ -6,4 +6,8 @@
     <Nullable>enable</Nullable>
   </PropertyGroup>
 
+  <ItemGroup>
+    <ProjectReference Include="..\ResourceHub.Domain\ResourceHub.Domain.csproj" />
+  </ItemGroup>
+
 </Project>
