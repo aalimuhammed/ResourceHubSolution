@@ -2,10 +2,11 @@
 {
     public class ServiceDto
     {
+        public int CursorId { get; set; }
         public string ActivityNo { get; set; } = null!;
-        public string CreatedOn { get; set; } = null!;
+        public DateOnly CreatedOn { get; set; } 
         public string CreatedBy { get; set; } = null!;
-        public string ChangedOn { get; set; } = null!;
+        public DateOnly ChangedOn { get; set; } 
         public string ChangedBy { get; set; } = null!;
         public string MaterialGroup { get; set; } = null!;
         public string ServiceCat { get; set; } = null!;

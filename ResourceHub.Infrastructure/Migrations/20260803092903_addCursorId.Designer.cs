@@ -3,6 +3,7 @@ using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using ResourceHub.Infrastructure.Contexts;
 
@@ -11,9 +12,11 @@ using ResourceHub.Infrastructure.Contexts;
 namespace ResourceHub.Infrastructure.Migrations
 {
     [DbContext(typeof(ResourceHubDbContext))]
-    partial class ResourceHubDbContextModelSnapshot : ModelSnapshot
+    [Migration("20260803092903_addCursorId")]
+    partial class addCursorId
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -39,8 +42,9 @@ namespace ResourceHub.Infrastructure.Migrations
                         .HasColumnType("longtext")
                         .HasColumnName("changed_by");
 
-                    b.Property<DateOnly>("ChangedOn")
-                        .HasColumnType("date")
+                    b.Property<string>("ChangedOn")
+                        .IsRequired()
+                        .HasColumnType("longtext")
                         .HasColumnName("changed_on");
 
                     b.Property<DateTime>("CreatedAt")
@@ -52,8 +56,9 @@ namespace ResourceHub.Infrastructure.Migrations
                         .HasColumnType("longtext")
                         .HasColumnName("created_by");
 
-                    b.Property<DateOnly>("CreatedOn")
-                        .HasColumnType("date")
+                    b.Property<string>("CreatedOn")
+                        .IsRequired()
+                        .HasColumnType("longtext")
                         .HasColumnName("created_on");
 
                     b.Property<int>("CursorId")
