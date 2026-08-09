@@ -24,35 +24,8 @@ namespace ResourceHub.Infrastructure.Repositories
 
             var pagesize = searchFilter.PageSize;
 
-            if (searchFilter.lastCursorId.HasValue)
-            {
-                query = query.Where(s => s.CursorId > searchFilter.lastCursorId);
-            }
+            query = ApplyFilter(query, searchFilter, cancellationToken);
 
-            if (!string.IsNullOrWhiteSpace(searchFilter.ActivityNo))
-            {
-               query = query.Where(s => s.ActivityNo == searchFilter.ActivityNo);
-            }
-            if (!string.IsNullOrWhiteSpace(searchFilter.MaterialGroup))
-            {
-                query = query.Where(s => s.MaterialGroup == searchFilter.MaterialGroup);
-            }
-            if (!string.IsNullOrWhiteSpace(searchFilter.ServiceCat))
-            {
-                query = query.Where(s => s.ServiceCat == searchFilter.ServiceCat);
-            }
-            if (!string.IsNullOrWhiteSpace(searchFilter.ShortTxt))
-            {
-                query = query.Where(s => s.ShortTxt.Contains(searchFilter.ShortTxt));
-            }
-            if (!string.IsNullOrWhiteSpace(searchFilter.LongTxt))
-            {
-                query = query.Where(s => s.LongTxt.Contains(searchFilter.LongTxt));
-            }
-            if(searchFilter.CreatedOn is not null)
-            {
-                query = query.Where(s => s.CreatedOn== searchFilter.CreatedOn);
-            }
             // pagesize = 3 
             // items will take 4 items 
             //to know if there are next items the condintion (items.count>pagesize) will decide
@@ -61,7 +34,6 @@ namespace ResourceHub.Infrastructure.Repositories
             query = query
                 .OrderBy(s => s.CursorId)
                 .Take(pagesize + 1); //21 item
-                
 
             var items = await query.Select(s => new ServiceDto
             {
@@ -92,28 +64,69 @@ namespace ResourceHub.Infrastructure.Repositories
 
             return result;
         }
-
         public async Task InsertNewService(ServiceDto serviceDto, CancellationToken cancellationToken)
         {
-            Service service = new Service
+            if (serviceDto is not null)
             {
-                DeletionInd = serviceDto.DeletionInd,
-                Unit = serviceDto.Unit,
-                ChangedOn = serviceDto.ChangedOn,
-                PrimaryLang = serviceDto.PrimaryLang,
-                ActivityNo = serviceDto.ActivityNo,
-                ChangedBy = serviceDto.ChangedBy,
-                CreatedBy = serviceDto.CreatedBy,
-                CreatedOn = serviceDto.CreatedOn,
-                Division = serviceDto.Division,
-                LongTxt = serviceDto.LongTxt,
-                MaterialGroup = serviceDto.MaterialGroup,
-                ServiceCat = serviceDto.ServiceCat,
-                ShortTxt = serviceDto.ShortTxt,
-                ValuationClass = serviceDto.ValuationClass
-            };
-            await _context.AddAsync(service);
-            
+                Service service = new Service
+                {
+                    DeletionInd = serviceDto.DeletionInd,
+                    Unit = serviceDto.Unit,
+                    ChangedOn = serviceDto.ChangedOn,
+                    PrimaryLang = serviceDto.PrimaryLang,
+                    ActivityNo = serviceDto.ActivityNo,
+                    ChangedBy = serviceDto.ChangedBy,
+                    CreatedBy = serviceDto.CreatedBy,
+                    CreatedOn = serviceDto.CreatedOn,
+                    Division = serviceDto.Division,
+                    LongTxt = serviceDto.LongTxt,
+                    MaterialGroup = serviceDto.MaterialGroup,
+                    ServiceCat = serviceDto.ServiceCat,
+                    ShortTxt = serviceDto.ShortTxt,
+                    ValuationClass = serviceDto.ValuationClass
+                };
+                await _context.AddAsync(service);
+            }
+            else
+            {
+                throw new Exception("ServiceDto cannot be null.");
+            }
+        }
+        private IQueryable<Service> ApplyFilter(
+            IQueryable<Service> query,
+            SearchFilterType searchFilter,
+            CancellationToken cancellationToken)
+        {
+            if (searchFilter.lastCursorId.HasValue)
+            {
+                query = query.Where(s => s.CursorId > searchFilter.lastCursorId);
+            }
+
+            if (!string.IsNullOrWhiteSpace(searchFilter.ActivityNo))
+            {
+                query = query.Where(s => s.ActivityNo == searchFilter.ActivityNo);
+            }
+            if (!string.IsNullOrWhiteSpace(searchFilter.MaterialGroup))
+            {
+                query = query.Where(s => s.MaterialGroup == searchFilter.MaterialGroup);
+            }
+            if (!string.IsNullOrWhiteSpace(searchFilter.ServiceCat))
+            {
+                query = query.Where(s => s.ServiceCat == searchFilter.ServiceCat);
+            }
+            if (!string.IsNullOrWhiteSpace(searchFilter.ShortTxt))
+            {
+                query = query.Where(s => s.ShortTxt.Contains(searchFilter.ShortTxt));
+            }
+            if (!string.IsNullOrWhiteSpace(searchFilter.LongTxt))
+            {
+                query = query.Where(s => s.LongTxt.Contains(searchFilter.LongTxt));
+            }
+            if (searchFilter.CreatedOn is not null)
+            {
+                query = query.Where(s => s.CreatedOn == searchFilter.CreatedOn);
+            }
+            return query;
         }
     }
 }

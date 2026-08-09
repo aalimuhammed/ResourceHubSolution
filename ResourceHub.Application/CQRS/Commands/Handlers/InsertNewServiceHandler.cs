@@ -1,28 +1,29 @@
 ﻿using ResourceHub.Application.Common.Mediator;
 using ResourceHub.Application.Interfaces;
-using System;
-using System.Collections.Generic;
-using System.Text;
 
 namespace ResourceHub.Application.CQRS.Commands.Handlers
 {
-    public class InsertNewServiceHandler :
+    internal class InsertNewServiceHandler :
         ICommandRequestHandler<InsertNewServiceCommand>
     {
         private readonly IServiceRepository _serviceRepository;
 
         private readonly IUnitOfWork _unitOfWork;
-
         public InsertNewServiceHandler(IServiceRepository serviceRepository,IUnitOfWork unitOfWork)
         {
             _serviceRepository = serviceRepository;
             _unitOfWork = unitOfWork;
         }
-        public async Task HandlerAsync(InsertNewServiceCommand request, CancellationToken cancellationToken = default)
+        public async Task HandlerAsync(InsertNewServiceCommand ? request, CancellationToken cancellationToken = default)
         {
-           await _serviceRepository.InsertNewService(request.ServiceDto, cancellationToken);
+            if(request is null)
+            {
+                throw new Exception("The Request is Empty");
+            }
 
-           await _unitOfWork.SaveChangesAsync(cancellationToken);
+            await _serviceRepository.InsertNewService(request.ServiceDto, cancellationToken);
+
+            await _unitOfWork.SaveChangesAsync(cancellationToken);
         }
     }
 }

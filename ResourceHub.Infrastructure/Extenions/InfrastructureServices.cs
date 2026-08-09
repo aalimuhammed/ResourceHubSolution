@@ -21,7 +21,6 @@ namespace ResourceHub.Infrastructure.Extenions
             options.UseMySql(connectionString, ServerVersion.AutoDetect(connectionString))
                .UseSnakeCaseNamingConvention());
 
-
             services.AddHttpClient<IResourceHubExternalService, ResourceHubExternalService>();
 
             services.AddScoped<IUnitOfWork, UnitOfWork>();

@@ -5,7 +5,7 @@
 namespace ResourceHub.Infrastructure.Migrations
 {
     /// <inheritdoc />
-    public partial class addValuesToCursorId : Migration
+    public partial class AddValuesToCursorId : Migration
     {
         /// <inheritdoc />
         protected override void Up(MigrationBuilder migrationBuilder)

@@ -4,7 +4,7 @@ using ResourceHub.Application.Interfaces;
 
 namespace ResourceHub.Application.CQRS.Query.Handlers
 {
-    public class GetServiceWithFiltersHandler:IQueryRequestHandler
+    internal class GetServiceWithFiltersHandler:IQueryRequestHandler
         <GetServicesWithFiltersQuery , 
         PaginatedServiceResultDto<ServiceDto>>
     {

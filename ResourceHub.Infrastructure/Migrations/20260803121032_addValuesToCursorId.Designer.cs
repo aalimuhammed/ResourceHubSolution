@@ -12,8 +12,8 @@ using ResourceHub.Infrastructure.Contexts;
 namespace ResourceHub.Infrastructure.Migrations
 {
     [DbContext(typeof(ResourceHubDbContext))]
-    [Migration("20260803121032_addValuesToCursorId")]
-    partial class addValuesToCursorId
+    [Migration("20260803121032_AddValuesToCursorId")]
+    partial class AddValuesToCursorId
     {
         /// <inheritdoc />
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
