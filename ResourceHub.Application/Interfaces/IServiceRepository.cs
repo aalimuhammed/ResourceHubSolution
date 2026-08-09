@@ -10,6 +10,10 @@ namespace ResourceHub.Application.Interfaces
         public Task<PaginatedServiceResultDto<ServiceDto>> GetPagintedServices(
             SearchFilterType  searchFilter,
             CancellationToken cancellationToken = default);
+
+        public Task InsertNewService(
+            ServiceDto serviceDto ,
+            CancellationToken cancellationToken);
             
     }
 }

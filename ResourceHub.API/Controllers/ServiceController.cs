@@ -2,6 +2,7 @@
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using ResourceHub.Application.Common.Mediator;
+using ResourceHub.Application.CQRS.Commands;
 using ResourceHub.Application.CQRS.Query;
 using ResourceHub.Application.CQRS.Query.Handlers;
 using ResourceHub.Application.Dtos;
@@ -23,12 +24,12 @@ namespace ResourceHub.API.Controllers
 
         [HttpGet]
         public async Task<ActionResult<IEnumerable<ServiceDto>>> GetServices(
-            [FromQuery] SearchFilterType searchFilter ,
+            [FromQuery] SearchFilterType searchFilter,
             CancellationToken cancellationToken = default)
         {
 
             var services = await _mediator.SendQueryAsync<GetServicesWithFiltersQuery, PaginatedServiceResultDto<ServiceDto>>
-                (new GetServicesWithFiltersQuery(searchFilter),cancellationToken);
+                (new GetServicesWithFiltersQuery(searchFilter), cancellationToken);
 
             if (services.ServicesDto.Any())
             {
@@ -36,6 +37,22 @@ namespace ResourceHub.API.Controllers
             }
 
             return NotFound("No Services found.");
+        }
+
+        [HttpPost]
+        public async Task<ActionResult> InsertNewServiceController(
+            [FromBody] ServiceDto serviceDto,
+            CancellationToken cancellationToken = default)
+        {
+            try
+            {
+                await _mediator.SendCommandAsync<InsertNewServiceCommand>(new InsertNewServiceCommand(serviceDto, cancellationToken));
+                return Ok("The Service is Inserted Successfully");
+            }
+            catch (Exception ex)
+            {
+                return BadRequest($"There is a problem while adding the service {ex.Message}");
+            }
         }
     }
 }

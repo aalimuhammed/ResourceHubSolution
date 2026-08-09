@@ -6,6 +6,6 @@ namespace ResourceHub.Application.Interfaces
 {
     public interface IUnitOfWork
     {
-         Task<int> SaveChangesAsync(CancellationToken cancellationToken);
+        Task<int> SaveChangesAsync(CancellationToken cancellationToken);
     }
 }

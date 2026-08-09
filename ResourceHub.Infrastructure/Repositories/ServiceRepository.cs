@@ -4,6 +4,7 @@ using ResourceHub.Application.Dtos;
 using ResourceHub.Application.Interfaces;
 using ResourceHub.Domain.Entities;
 using ResourceHub.Infrastructure.Contexts;
+using ResourceHub.Infrastructure.UOW;
 
 namespace ResourceHub.Infrastructure.Repositories
 {
@@ -11,7 +12,7 @@ namespace ResourceHub.Infrastructure.Repositories
     {
         private readonly ResourceHubDbContext _context;
 
-        public ServiceRepository(ResourceHubDbContext context)
+        public ServiceRepository(ResourceHubDbContext context )
         {
             _context = context;
         }
@@ -58,8 +59,9 @@ namespace ResourceHub.Infrastructure.Repositories
             // we have to retuen the same size of pagesize so when we return we take pagesize not pagesize+1
 
             query = query
-                .Take(pagesize + 1)
-                .OrderBy(s => s.CursorId);
+                .OrderBy(s => s.CursorId)
+                .Take(pagesize + 1); //21 item
+                
 
             var items = await query.Select(s => new ServiceDto
             {
@@ -79,7 +81,7 @@ namespace ResourceHub.Infrastructure.Repositories
                 ValuationClass = s.ValuationClass,
                 CursorId = s.CursorId
                
-            }).ToListAsync(cancellationToken); ;
+            }).ToListAsync(cancellationToken); //21 
 
             var result = new PaginatedServiceResultDto<ServiceDto>
             {
@@ -89,6 +91,29 @@ namespace ResourceHub.Infrastructure.Repositories
             };
 
             return result;
+        }
+
+        public async Task InsertNewService(ServiceDto serviceDto, CancellationToken cancellationToken)
+        {
+            Service service = new Service
+            {
+                DeletionInd = serviceDto.DeletionInd,
+                Unit = serviceDto.Unit,
+                ChangedOn = serviceDto.ChangedOn,
+                PrimaryLang = serviceDto.PrimaryLang,
+                ActivityNo = serviceDto.ActivityNo,
+                ChangedBy = serviceDto.ChangedBy,
+                CreatedBy = serviceDto.CreatedBy,
+                CreatedOn = serviceDto.CreatedOn,
+                Division = serviceDto.Division,
+                LongTxt = serviceDto.LongTxt,
+                MaterialGroup = serviceDto.MaterialGroup,
+                ServiceCat = serviceDto.ServiceCat,
+                ShortTxt = serviceDto.ShortTxt,
+                ValuationClass = serviceDto.ValuationClass
+            };
+            await _context.AddAsync(service);
+            
         }
     }
 }
