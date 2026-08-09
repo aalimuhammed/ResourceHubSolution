@@ -13,6 +13,5 @@ namespace ResourceHub.Application.Interfaces
         public Task InsertNewService(
             ServiceDto serviceDto ,
             CancellationToken cancellationToken);
-            
     }
 }

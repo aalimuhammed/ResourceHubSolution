@@ -17,9 +17,6 @@ builder.Services.AddControllers();
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
 
-//builder.Services.AddMediatR(typeof(GetServiceWithFiltersHandler));
-
-
 var app = builder.Build();
 
 if (app.Environment.IsDevelopment())

@@ -19,7 +19,6 @@
             if (handler == null)
                 throw new InvalidOperationException($"Handler for {request.GetType().Name} not found. Please ensure the handler is registered in the service collection.");
 
-            // Get the HandlerAsync method from the interface
             var method = handlerType.GetMethod("HandlerAsync");
             if (method == null)
                 throw new InvalidOperationException($"Handler method not found for {request.GetType().Name}.");
@@ -42,7 +41,6 @@
             if (handler == null)
                 throw new InvalidOperationException($"Handler for {request.GetType().Name} not found. Please ensure the handler is registered in the service collection.");
 
-            // Get the HandlerAsync method from the interface
             var method = handlerType.GetMethod("HandlerAsync");
             if (method == null)
                 throw new InvalidOperationException($"Handler method not found for {request.GetType().Name}.");
@@ -65,7 +63,6 @@
             if (handler == null)
                 throw new InvalidOperationException($"Handler for {request.GetType().Name} not found. Please ensure the handler is registered in the service collection.");
 
-            // Get the HandlerAsync method from the interface
             var method = handlerType.GetMethod("HandlerAsync");
             if (method == null)
                 throw new InvalidOperationException($"Handler method not found for {request.GetType().Name}.");

@@ -14,10 +14,8 @@ namespace ResourceHub.Application.Extenions
         }
         private static IServiceCollection AddMediator(this IServiceCollection services, Assembly assembly)
         {
-            // Register the mediator implementation
             services.AddScoped<IMediator, Mediator>();
 
-            // Register all command handlers (void return)
             var commandHandlerTypes = assembly.GetTypes()
                 .Where(t => t.GetInterfaces().Any(i =>
                     i.IsGenericType &&
@@ -31,7 +29,6 @@ namespace ResourceHub.Application.Extenions
                 services.AddScoped(interfaceType, handlerType);
             }
 
-            // Register all command handlers (with return value)
             var commandHandlerWithResponseTypes = assembly.GetTypes()
                 .Where(t => t.GetInterfaces().Any(i =>
                     i.IsGenericType &&
@@ -45,7 +42,6 @@ namespace ResourceHub.Application.Extenions
                 services.AddScoped(interfaceType, handlerType);
             }
 
-            // Register all query handlers
             var queryHandlerTypes = assembly.GetTypes()
                 .Where(t => t.GetInterfaces().Any(i =>
                     i.IsGenericType &&

@@ -2,7 +2,7 @@
 {
     public class SearchFilterType 
     {
-        public int  PageSize { get; set; }
+        public  int PageSize { get;} = 10;
         public int ? lastCursorId { get; set; }
         public string ? ActivityNo { get; set; }
         public string? MaterialGroup { get; set; }

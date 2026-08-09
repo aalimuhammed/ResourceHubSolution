@@ -24,7 +24,7 @@ namespace ResourceHub.Infrastructure.Repositories
 
             var pagesize = searchFilter.PageSize;
 
-            query = ApplyFilter(query, searchFilter, cancellationToken);
+            query = ApplyFilter(query, searchFilter);
 
             // pagesize = 3 
             // items will take 4 items 
@@ -94,8 +94,7 @@ namespace ResourceHub.Infrastructure.Repositories
         }
         private IQueryable<Service> ApplyFilter(
             IQueryable<Service> query,
-            SearchFilterType searchFilter,
-            CancellationToken cancellationToken)
+            SearchFilterType searchFilter)
         {
             if (searchFilter.lastCursorId.HasValue)
             {

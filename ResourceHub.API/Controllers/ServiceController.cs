@@ -16,7 +16,6 @@ namespace ResourceHub.API.Controllers
     public class ServiceController : ControllerBase
     {
         private readonly IMediator _mediator;
-
         public ServiceController(IMediator mediator)
         {
             _mediator = mediator;
