@@ -1,17 +1,14 @@
 ﻿using Microsoft.EntityFrameworkCore;
-using Newtonsoft.Json.Linq;
 using ResourceHub.Application.Dtos;
 using ResourceHub.Application.Interfaces;
 using ResourceHub.Domain.Entities;
 using ResourceHub.Infrastructure.Contexts;
-using ResourceHub.Infrastructure.UOW;
 
 namespace ResourceHub.Infrastructure.Repositories
 {
-    public class ServiceRepository : IServiceRepository
+    public class ServiceRepository : IServiceRepository 
     {
         private readonly ResourceHubDbContext _context;
-
         public ServiceRepository(ResourceHubDbContext context )
         {
             _context = context;
@@ -33,7 +30,7 @@ namespace ResourceHub.Infrastructure.Repositories
 
             query = query
                 .OrderBy(s => s.CursorId)
-                .Take(pagesize + 1); //21 item
+                .Take(pagesize + 1); 
 
             var items = await query.Select(s => new ServiceDto
             {
@@ -53,7 +50,7 @@ namespace ResourceHub.Infrastructure.Repositories
                 ValuationClass = s.ValuationClass,
                 CursorId = s.CursorId
                
-            }).ToListAsync(cancellationToken); //21 
+            }).ToListAsync(cancellationToken); 
 
             var result = new PaginatedServiceResultDto<ServiceDto>
             {
@@ -66,7 +63,8 @@ namespace ResourceHub.Infrastructure.Repositories
         }
         public async Task InsertNewService(ServiceDto serviceDto, CancellationToken cancellationToken)
         {
-            if (serviceDto is not null)
+
+            if (checkNullabelty(serviceDto))
             {
                 Service service = new Service
                 {
@@ -89,8 +87,32 @@ namespace ResourceHub.Infrastructure.Repositories
             }
             else
             {
-                throw new Exception("ServiceDto cannot be null.");
+                throw new Exception("Fields cannot be null.");
             }
+        }
+
+        public bool isActivityNoFounded(string activityNumber)
+        {
+            return _context.Services.Any(s=>s.ActivityNo == activityNumber);
+        }
+
+        private bool checkNullabelty(ServiceDto serviceDto)
+        {
+            if (serviceDto.ActivityNo==null ||
+                serviceDto.Division == null ||
+                serviceDto.Unit == null ||
+                serviceDto.ServiceCat == null ||
+                serviceDto.ChangedBy == null ||
+                serviceDto.CreatedBy == null ||
+                serviceDto.ShortTxt == null ||
+                serviceDto.LongTxt == null ||
+                serviceDto.PrimaryLang == null ||
+                serviceDto.ValuationClass == null
+                )
+            {
+                return false;
+            }
+            else { return true; }
         }
         private IQueryable<Service> ApplyFilter(
             IQueryable<Service> query,
@@ -127,5 +149,6 @@ namespace ResourceHub.Infrastructure.Repositories
             }
             return query;
         }
+        
     }
 }

@@ -29,6 +29,8 @@ namespace ResourceHub.Infrastructure.Extenions
 
             services.AddScoped<IResourceHubInternalService, ResourceHubInternalService>();
 
+            services.AddScoped(typeof(IGenericReposetory<>), typeof(GenericRepository<>));
+
             return services;
         }
     }

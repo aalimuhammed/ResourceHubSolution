@@ -39,6 +39,21 @@ namespace ResourceHub.API.Controllers
             return NotFound("No Services found.");
         }
 
+        [HttpGet("getbyactivitynumber")]
+        public async Task<ActionResult<ServiceDto>> GetServiceByActivityNumber(
+            [FromQuery] string activityNumber,
+             CancellationToken cancellationToken
+            )
+        {
+            var service = await _mediator.SendQueryAsync<GetServiceWithActivityNumberQuery, ServiceDto>
+                (new GetServiceWithActivityNumberQuery(activityNumber), cancellationToken);
+            if(service != null)
+            {
+                return Ok(service);
+            }
+            return NotFound("No Service found.");
+        }
+
         [HttpPost("createnewservice")]
         public async Task<ActionResult> InsertNewServiceController(
             [FromBody] ServiceDto serviceDto,
