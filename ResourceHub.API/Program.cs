@@ -1,18 +1,25 @@
+
+using ResourceHub.Application.Extenions;
 using ResourceHub.Infrastructure.Extenions;
 
 var builder = WebApplication.CreateBuilder(args);
 
-// Add services to the container.
-
-builder.Services.AddInfarstructureService(builder.Configuration);
+builder.Services.AddInfarstructureService(builder.Configuration)
+    .AddApplicationService();
 
 builder.Services.AddControllers();
 
+builder.Services.AddEndpointsApiExplorer();
 
+builder.Services.AddSwaggerGen();
 
 var app = builder.Build();
 
-// Configure the HTTP request pipeline.
+if (app.Environment.IsDevelopment())
+{
+    app.UseSwagger();
+    app.UseSwaggerUI();
+}
 
 app.UseHttpsRedirection();
 

@@ -11,7 +11,6 @@ namespace ResourceHub.Infrastructure.Services
         public string UserName { get; set; } = null!;
         public string Password { get; set; } = null!;
         public string SapUrl { get; set; } = null!;
-
     }
     public class ResourceHubExternalService : IResourceHubExternalService
     {

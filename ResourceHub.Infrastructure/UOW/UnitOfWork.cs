@@ -6,6 +6,7 @@ namespace ResourceHub.Infrastructure.UOW
     public class UnitOfWork : IUnitOfWork
     {
         private readonly ResourceHubDbContext _context;
+
         public UnitOfWork(ResourceHubDbContext context)
         {
             _context = context;

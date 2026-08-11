@@ -3,6 +3,7 @@ using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using ResourceHub.Application.Interfaces;
 using ResourceHub.Infrastructure.Contexts;
+using ResourceHub.Infrastructure.Repositories;
 using ResourceHub.Infrastructure.Services;
 using ResourceHub.Infrastructure.UOW;
 
@@ -24,7 +25,11 @@ namespace ResourceHub.Infrastructure.Extenions
 
             services.AddScoped<IUnitOfWork, UnitOfWork>();
 
+            services.AddScoped<IServiceRepository,ServiceRepository>();
+
             services.AddScoped<IResourceHubInternalService, ResourceHubInternalService>();
+
+            services.AddScoped(typeof(IGenericReposetory<>), typeof(GenericRepository<>));
 
             return services;
         }
