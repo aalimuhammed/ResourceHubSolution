@@ -45,13 +45,19 @@ namespace ResourceHub.API.Controllers
              CancellationToken cancellationToken
             )
         {
-            var service = await _mediator.SendQueryAsync<GetServiceWithActivityNumberQuery, ServiceDto>
-                (new GetServiceWithActivityNumberQuery(activityNumber), cancellationToken);
-            if(service != null)
+            try
             {
-                return Ok(service);
+                var service = await _mediator.SendQueryAsync<GetServiceWithActivityNumberQuery, ServiceDto>
+                (new GetServiceWithActivityNumberQuery(activityNumber), cancellationToken);
+                if (service != null)
+                {
+                    return Ok(service);
+                }
+                return NotFound("No Service found.");
             }
-            return NotFound("No Service found.");
+            catch (Exception ex){
+                return BadRequest(ex.Message);
+            }
         }
 
         [HttpPost("createnewservice")]
@@ -61,7 +67,7 @@ namespace ResourceHub.API.Controllers
         {
             try
             {
-                await _mediator.SendCommandAsync<InsertNewServiceCommand>(new InsertNewServiceCommand(serviceDto, cancellationToken));
+                await _mediator.SendCommandAsync(new InsertNewServiceCommand(serviceDto, cancellationToken));
                 return Ok("The Service is Inserted Successfully");
             }
             catch (Exception ex)

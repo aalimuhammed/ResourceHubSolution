@@ -19,9 +19,9 @@ namespace ResourceHub.Application.CQRS.Commands.Handlers
             _serviceRepository = serviceRepository;
             _unitOfWork = unitOfWork;
         }
-        public async Task HandlerAsync(InsertNewServiceCommand ? request, CancellationToken cancellationToken = default)
+        public async Task HandlerAsync(InsertNewServiceCommand request, CancellationToken cancellationToken = default)
         {
-            bool isfound = _serviceRepository.isActivityNoFounded(request.ServiceDto.ActivityNo);
+            bool isfound = _serviceRepository.isActivityNoExists(request.ServiceDto.ActivityNo);
 
             if (isfound)
             {

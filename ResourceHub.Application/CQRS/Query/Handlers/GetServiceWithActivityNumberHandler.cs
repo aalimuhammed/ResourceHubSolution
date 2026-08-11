@@ -20,9 +20,11 @@ namespace ResourceHub.Application.CQRS.Query.Handlers
                 s => s.ActivityNo == request.activityNumber, 
                 cancellationToken);
 
+            ServiceDto serviceDto = new ServiceDto();
+
             if (service is not null)
             {
-                return new ServiceDto
+                serviceDto = new ServiceDto()
                 {
                     CursorId = service.CursorId,
                     ActivityNo = service.ActivityNo,
@@ -41,10 +43,7 @@ namespace ResourceHub.Application.CQRS.Query.Handlers
                     LongTxt = service.LongTxt
                 };
             }
-            else
-            {
-                return null;
-            }
+            return serviceDto;
         }
     }
 }

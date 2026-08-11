@@ -1,6 +1,4 @@
 
-using ResourceHub.Application.CQRS.Query;
-using ResourceHub.Application.CQRS.Query.Handlers;
 using ResourceHub.Application.Extenions;
 using ResourceHub.Infrastructure.Extenions;
 
@@ -8,13 +6,12 @@ var builder = WebApplication.CreateBuilder(args);
 
 // Add services to the container.
 
-builder.Services.AddInfarstructureService(builder.Configuration);
-
-builder.Services.AddApplicationService();
+builder.Services.AddInfarstructureService(builder.Configuration).AddApplicationService();
 
 builder.Services.AddControllers();
 
 builder.Services.AddEndpointsApiExplorer();
+
 builder.Services.AddSwaggerGen();
 
 var app = builder.Build();

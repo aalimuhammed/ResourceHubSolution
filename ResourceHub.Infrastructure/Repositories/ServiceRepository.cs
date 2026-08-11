@@ -23,10 +23,12 @@ namespace ResourceHub.Infrastructure.Repositories
 
             query = ApplyFilter(query, searchFilter);
 
+            #region CursorPaginationExplaination
             // pagesize = 3 
             // items will take 4 items 
             //to know if there are next items the condintion (items.count>pagesize) will decide
             // we have to retuen the same size of pagesize so when we return we take pagesize not pagesize+1
+            #endregion
 
             query = query
                 .OrderBy(s => s.CursorId)
@@ -63,8 +65,11 @@ namespace ResourceHub.Infrastructure.Repositories
         }
         public async Task InsertNewService(ServiceDto serviceDto, CancellationToken cancellationToken)
         {
-
-            if (checkNullabelty(serviceDto))
+            if (!checkNullabelty(serviceDto) && serviceDto is null)
+            {
+                throw new Exception("Fields cannot be null.");
+            }
+            try
             {
                 Service service = new Service
                 {
@@ -85,13 +90,13 @@ namespace ResourceHub.Infrastructure.Repositories
                 };
                 await _context.AddAsync(service);
             }
-            else
-            {
-                throw new Exception("Fields cannot be null.");
+            catch (Exception ex) 
+            { 
+                throw new Exception($"Error inserting new service: {ex.Message}", ex);
             }
         }
 
-        public bool isActivityNoFounded(string activityNumber)
+        public bool isActivityNoExists(string activityNumber)
         {
             return _context.Services.Any(s=>s.ActivityNo == activityNumber);
         }
