@@ -1,5 +1,4 @@
-﻿
-using Microsoft.AspNetCore.Http;
+﻿using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using ResourceHub.Application.Common.Mediator;
 using ResourceHub.Application.CQRS.Commands;
@@ -49,14 +48,11 @@ namespace ResourceHub.API.Controllers
             {
                 var service = await _mediator.SendQueryAsync<GetServiceWithActivityNumberQuery, ServiceDto>
                 (new GetServiceWithActivityNumberQuery(activityNumber), cancellationToken);
-                if (service != null)
-                {
-                    return Ok(service);
-                }
-                return NotFound("No Service found.");
+
+                return Ok(service);
             }
             catch (Exception ex){
-                return BadRequest(ex.Message);
+                return StatusCode(404 , ex.Message);
             }
         }
 

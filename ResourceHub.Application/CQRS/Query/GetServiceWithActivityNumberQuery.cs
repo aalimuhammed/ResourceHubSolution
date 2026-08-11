@@ -6,6 +6,7 @@ using System.Text;
 
 namespace ResourceHub.Application.CQRS.Query
 {
-    public record GetServiceWithActivityNumberQuery(string activityNumber) : IQueryRequest<ServiceDto>;
+    public record GetServiceWithActivityNumberQuery(string activityNumber) 
+        : IQueryRequest<ServiceDto>;
     
 }

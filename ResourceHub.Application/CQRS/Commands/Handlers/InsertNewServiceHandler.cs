@@ -21,21 +21,27 @@ namespace ResourceHub.Application.CQRS.Commands.Handlers
         }
         public async Task HandlerAsync(InsertNewServiceCommand request, CancellationToken cancellationToken = default)
         {
-            bool isfound = _serviceRepository.isActivityNoExists(request.ServiceDto.ActivityNo);
+            bool isActivityNoFound = _serviceRepository.isActivityNoExists(request.ServiceDto.ActivityNo);
 
-            if (isfound)
+            if (isActivityNoFound)
             {
                 throw new Exception($"Service with ActivityNo '{request.ServiceDto.ActivityNo}' already exists.");
             }
-
-            if (request is null)
+            try
             {
-                throw new Exception("The Request is Empty");
+                if (request is null)
+                {
+                    throw new Exception("The Request is Empty");
+                }
+
+                await _serviceRepository.InsertNewService(request.ServiceDto, cancellationToken);
+
+                await _unitOfWork.SaveChangesAsync(cancellationToken);
             }
-
-            await _serviceRepository.InsertNewService(request.ServiceDto, cancellationToken);
-
-            await _unitOfWork.SaveChangesAsync(cancellationToken);
+            catch (Exception ex) {
+                throw new Exception($"An error occurred while inserting the new service: {ex.Message}");
+            }
+            
         }
     }
 }
