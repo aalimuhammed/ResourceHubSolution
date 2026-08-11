@@ -65,7 +65,7 @@ namespace ResourceHub.Infrastructure.Repositories
         }
         public async Task InsertNewService(ServiceDto serviceDto, CancellationToken cancellationToken)
         {
-            if (!checkNullabelty(serviceDto) && serviceDto is null)
+            if (!CheckNullability(serviceDto) && serviceDto is null)
             {
                 throw new Exception("Fields cannot be null.");
             }
@@ -101,7 +101,7 @@ namespace ResourceHub.Infrastructure.Repositories
             return _context.Services.Any(s=>s.ActivityNo == activityNumber);
         }
 
-        private bool checkNullabelty(ServiceDto serviceDto)
+        private bool CheckNullability(ServiceDto serviceDto)
         {
             if (serviceDto.ActivityNo==null ||
                 serviceDto.Division == null ||

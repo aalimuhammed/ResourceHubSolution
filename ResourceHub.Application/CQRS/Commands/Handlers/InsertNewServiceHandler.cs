@@ -7,15 +7,12 @@ namespace ResourceHub.Application.CQRS.Commands.Handlers
     internal class InsertNewServiceHandler :
         ICommandRequestHandler<InsertNewServiceCommand>
     {
-        private readonly IGenericReposetory<Service> _serviceGenericRepo;
         private readonly IServiceRepository _serviceRepository;
         private readonly IUnitOfWork _unitOfWork;
         public InsertNewServiceHandler(
-            IGenericReposetory<Service> serviceGenericRepo,
             IServiceRepository serviceRepository,
             IUnitOfWork unitOfWork)
         {
-            _serviceGenericRepo = serviceGenericRepo;
             _serviceRepository = serviceRepository;
             _unitOfWork = unitOfWork;
         }
