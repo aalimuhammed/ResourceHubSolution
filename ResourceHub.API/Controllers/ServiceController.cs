@@ -25,7 +25,6 @@ namespace ResourceHub.API.Controllers
             [FromQuery] SearchFilterType searchFilter,
             CancellationToken cancellationToken = default)
         {
-
             var services = await _mediator.SendQueryAsync<GetServicesWithFiltersQuery,
                 PaginatedServiceResultDto<ServiceDto>>
                 (new GetServicesWithFiltersQuery(searchFilter), cancellationToken);

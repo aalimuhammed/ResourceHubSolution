@@ -15,6 +15,6 @@ namespace ResourceHub.Application.Interfaces
             ServiceDto serviceDto ,
             CancellationToken cancellationToken);
 
-         bool isActivityNoExists(string activityNumber);
+         Task<bool> isActivityNoExists(string activityNumber);
     }
 }

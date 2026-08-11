@@ -96,9 +96,9 @@ namespace ResourceHub.Infrastructure.Repositories
             }
         }
 
-        public bool isActivityNoExists(string activityNumber)
+        public async Task<bool> isActivityNoExists(string activityNumber)
         {
-            return _context.Services.Any(s=>s.ActivityNo == activityNumber);
+            return await _context.Services.AnyAsync(s=>s.ActivityNo == activityNumber);
         }
 
         private bool CheckNullability(ServiceDto serviceDto)

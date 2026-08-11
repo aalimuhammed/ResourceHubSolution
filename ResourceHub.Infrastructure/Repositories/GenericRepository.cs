@@ -17,7 +17,7 @@ namespace ResourceHub.Infrastructure.Repositories
             _set = context.Set<T>();
         }
         public async Task<T?> GetByFirstOrDefault(
-            Expression<Func<T,bool>>filterByCondition = null ,
+            Expression<Func<T,bool>> ?filterByCondition = null ,
             CancellationToken cancellationToken = default)
         {
             if (filterByCondition is not null)

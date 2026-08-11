@@ -9,13 +9,9 @@ namespace ResourceHub.Application.CQRS.Query.Handlers
         IQueryRequestHandler<GetServiceWithActivityNumberQuery, ServiceDto>
     {
         private readonly IGenericReposetory<Service> _serviceRepository;
-        private readonly IServiceRepository _repo;
-        public GetServiceWithActivityNumberHandler(
-            IGenericReposetory<Service> serviceRepository,
-            IServiceRepository repo)
+        public GetServiceWithActivityNumberHandler(IGenericReposetory<Service> serviceRepository)
         {
             _serviceRepository = serviceRepository;
-            _repo = repo;
         }
         public async Task<ServiceDto> HandlerAsync(
             GetServiceWithActivityNumberQuery request,

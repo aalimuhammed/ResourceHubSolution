@@ -1,6 +1,5 @@
 ﻿using ResourceHub.Application.Common.Mediator;
 using ResourceHub.Application.Interfaces;
-using ResourceHub.Domain.Entities;
 
 namespace ResourceHub.Application.CQRS.Commands.Handlers
 {
@@ -18,7 +17,7 @@ namespace ResourceHub.Application.CQRS.Commands.Handlers
         }
         public async Task HandlerAsync(InsertNewServiceCommand request, CancellationToken cancellationToken = default)
         {
-            bool isActivityNoFound = _serviceRepository.isActivityNoExists(request.ServiceDto.ActivityNo);
+            bool isActivityNoFound = await _serviceRepository.isActivityNoExists(request.ServiceDto.ActivityNo);
 
             if (isActivityNoFound)
             {
