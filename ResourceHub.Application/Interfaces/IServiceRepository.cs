@@ -1,7 +1,5 @@
 ﻿using ResourceHub.Application.Dtos;
-using System;
-using System.Collections.Generic;
-using System.Text;
+using ResourceHub.Domain.Entities;
 
 namespace ResourceHub.Application.Interfaces
 {
@@ -16,5 +14,8 @@ namespace ResourceHub.Application.Interfaces
             CancellationToken cancellationToken);
 
          Task<bool> isActivityNoExists(string activityNumber);
+
+         Task<Users> LoginAsync(LoginDto loginDto , CancellationToken cancellationToken);  
+
     }
 }
