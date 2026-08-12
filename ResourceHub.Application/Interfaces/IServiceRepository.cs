@@ -15,7 +15,5 @@ namespace ResourceHub.Application.Interfaces
 
          Task<bool> isActivityNoExists(string activityNumber);
 
-         Task<Users> LoginAsync(LoginDto loginDto , CancellationToken cancellationToken);  
-
     }
 }

@@ -9,8 +9,6 @@ using ResourceHub.Infrastructure.Repositories;
 using ResourceHub.Infrastructure.Services;
 using ResourceHub.Infrastructure.UOW;
 using System.Text;
-
-
 namespace ResourceHub.Infrastructure.Extenions
 {
     public static class InfrastructureServices
@@ -30,7 +28,10 @@ namespace ResourceHub.Infrastructure.Extenions
             services.AddScoped<IJwtTokenJenerator, TokenService>();
 
             services.AddScoped<IPasswordService, PasswordService>();
+
             services.AddScoped<IUnitOfWork, UnitOfWork>();
+
+            services.AddScoped<IUserInterface, UserRepository>();
 
             services.AddScoped<IServiceRepository,ServiceRepository>();
 

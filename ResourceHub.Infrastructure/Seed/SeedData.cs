@@ -7,10 +7,10 @@ namespace ResourceHub.Infrastructure.Seed
   {
         public static async Task InitializeData(ResourceHubDbContext context)
         {
-             await SeedDepartments(context);
+             await SeedUsers(context);
         }
 
-         public static async Task SeedDepartments(ResourceHubDbContext context)
+         public static async Task SeedUsers(ResourceHubDbContext context)
          {
              if (!context.Users.Any())
                  {

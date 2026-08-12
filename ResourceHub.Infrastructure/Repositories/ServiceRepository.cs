@@ -9,12 +9,10 @@ namespace ResourceHub.Infrastructure.Repositories
     public class ServiceRepository : IServiceRepository 
     {
         private readonly ResourceHubDbContext _context;
-        private readonly IPasswordService _passwordService;
 
-        public ServiceRepository(ResourceHubDbContext context ,IPasswordService passwordService)
+        public ServiceRepository(ResourceHubDbContext context)
         {
             _context = context;
-            _passwordService = passwordService;
         }
         public async Task<PaginatedServiceResultDto<ServiceDto>> GetPagintedServices(
             SearchFilterType searchFilter,
@@ -66,24 +64,7 @@ namespace ResourceHub.Infrastructure.Repositories
 
             return result;
         }
-        public async Task<Users> LoginAsync(LoginDto loginDto , CancellationToken cancellationToken)
-        {
-            var user = await _context.Users.FirstOrDefaultAsync(u => u.Email == loginDto.email);
-
-            if(user is null)
-            {
-                throw new Exception("User not found.");
-            }
-
-            bool verifyPassword = _passwordService.VerifyPassword(loginDto.password , user.Password);
-
-            if(!verifyPassword)
-            {
-                throw new Exception("Invalid password.");
-            }
-
-            return user;
-        }
+        
         public async Task InsertNewService(ServiceDto serviceDto, CancellationToken cancellationToken)
         {
             if (!CheckNullability(serviceDto) && serviceDto is null)

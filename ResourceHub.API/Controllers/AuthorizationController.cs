@@ -1,5 +1,7 @@
 ﻿using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
+using ResourceHub.Application.Common.Mediator;
+using ResourceHub.Application.CQRS.Commands;
 using ResourceHub.Application.Dtos;
 using ResourceHub.Application.Interfaces;
 
@@ -9,33 +11,40 @@ namespace ResourceHub.API.Controllers
     [ApiController]
     public class AuthorizationController : ControllerBase
     {
-        private readonly IServiceRepository _serviceRepository;
         private readonly IJwtTokenJenerator _jwtTokenJenerator;
+        private readonly IUserInterface _userRepository;
+        private readonly IMediator _mediator;
 
         public AuthorizationController(
-            IServiceRepository serviceRepository , 
-            IJwtTokenJenerator jwtTokenJenerator)
+            IJwtTokenJenerator jwtTokenJenerator,
+            IUserInterface userRepository,
+            IMediator mediator
+            )
         {
-            _serviceRepository = serviceRepository;
             _jwtTokenJenerator = jwtTokenJenerator;
+            _userRepository = userRepository;
+            _mediator = mediator;
         }
 
         [HttpPost]
-        public async Task<ActionResult> Login([FromBody] LoginDto loginDto, CancellationToken cancellationToken)
+        public async Task<ActionResult> Login(
+        [FromBody] LoginDto loginDto,
+        CancellationToken cancellationToken)
         {
             try
             {
-                var user = await _serviceRepository.LoginAsync(loginDto, cancellationToken);
-                var token = _jwtTokenJenerator.GenerateToken(user);
+                var token = await _mediator.SendCommandAsync<LoginCommand, string>(
+                    new LoginCommand(loginDto),
+                    cancellationToken);
+
                 return Ok(new
                 {
-                    token = token
+                    Token = token
                 });
             }
             catch (Exception ex)
             {
                 return Unauthorized(ex.Message);
-
             }
         }
     }
