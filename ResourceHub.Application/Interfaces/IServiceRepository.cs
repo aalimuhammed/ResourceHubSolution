@@ -5,7 +5,7 @@ namespace ResourceHub.Application.Interfaces
 {
     public interface IServiceRepository
     {
-         Task<PaginatedServiceResultDto<ServiceDto>> GetPagintedServices(
+         Task<PaginatedServiceResultDto<ServiceResponseDto>> GetPagintedServices(
             SearchFilterType  searchFilter,
             CancellationToken cancellationToken = default);
 

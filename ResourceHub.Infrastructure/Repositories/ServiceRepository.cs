@@ -14,7 +14,7 @@ namespace ResourceHub.Infrastructure.Repositories
         {
             _context = context;
         }
-        public async Task<PaginatedServiceResultDto<ServiceDto>> GetPagintedServices(
+        public async Task<PaginatedServiceResultDto<ServiceResponseDto>> GetPagintedServices(
             SearchFilterType searchFilter,
             CancellationToken cancellationToken = default)
         {
@@ -35,8 +35,9 @@ namespace ResourceHub.Infrastructure.Repositories
                 .OrderBy(s => s.CursorId)
                 .Take(pagesize + 1); 
 
-            var items = await query.Select(s => new ServiceDto
+            var items = await query.Select(s => new ServiceResponseDto
             {
+                CursorId = s.CursorId,
                 DeletionInd = s.DeletionInd,
                 Unit = s.Unit,
                 ChangedOn = s.ChangedOn,
@@ -51,11 +52,10 @@ namespace ResourceHub.Infrastructure.Repositories
                 ServiceCat = s.ServiceCat,
                 ShortTxt = s.ShortTxt,
                 ValuationClass = s.ValuationClass,
-                CursorId = s.CursorId
                
             }).ToListAsync(cancellationToken); 
 
-            var result = new PaginatedServiceResultDto<ServiceDto>
+            var result = new PaginatedServiceResultDto<ServiceResponseDto>
             {
                 ServicesDto = items.Take(pagesize),
 
@@ -73,8 +73,11 @@ namespace ResourceHub.Infrastructure.Repositories
             }
             try
             {
+                int lastCursorId=_context.Services.Max(s =>s.CursorId);
+
                 Service service = new Service
                 {
+                    CursorId = lastCursorId + 1,
                     DeletionInd = serviceDto.DeletionInd,
                     Unit = serviceDto.Unit,
                     ChangedOn = serviceDto.ChangedOn,
@@ -90,7 +93,7 @@ namespace ResourceHub.Infrastructure.Repositories
                     ShortTxt = serviceDto.ShortTxt,
                     ValuationClass = serviceDto.ValuationClass
                 };
-                await _context.AddAsync(service);
+                await _context.Services.AddAsync(service);
             }
             catch (Exception ex) 
             { 

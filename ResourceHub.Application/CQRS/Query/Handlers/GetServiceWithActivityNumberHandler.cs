@@ -28,7 +28,6 @@ namespace ResourceHub.Application.CQRS.Query.Handlers
 
             var serviceDto = new ServiceDto()
             {
-                CursorId = service.CursorId,
                 ActivityNo = service.ActivityNo,
                 CreatedOn = service.CreatedOn,
                 CreatedBy = service.CreatedBy,

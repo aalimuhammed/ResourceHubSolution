@@ -21,12 +21,12 @@ namespace ResourceHub.API.Controllers
         }
 
         [HttpGet("getallservices")]
-        public async Task<ActionResult<IEnumerable<ServiceDto>>> GetServices(
+        public async Task<ActionResult<IEnumerable<ServiceResponseDto>>> GetServices(
             [FromQuery] SearchFilterType searchFilter,
             CancellationToken cancellationToken = default)
         {
             var services = await _mediator.SendQueryAsync<GetServicesWithFiltersQuery,
-                PaginatedServiceResultDto<ServiceDto>>
+                PaginatedServiceResultDto<ServiceResponseDto>>
                 (new GetServicesWithFiltersQuery(searchFilter), cancellationToken);
 
             if (services.ServicesDto.Any())

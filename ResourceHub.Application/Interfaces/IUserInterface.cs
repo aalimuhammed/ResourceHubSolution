@@ -9,5 +9,6 @@ namespace ResourceHub.Application.Interfaces
     public interface IUserInterface
     {
         Task<Users> LoginAsync(LoginDto loginDto, CancellationToken cancellationToken);
+        Task AddNewUserAsync(UserDto userDto , CancellationToken cancellationToken);
     }
 }

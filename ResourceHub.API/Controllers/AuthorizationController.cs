@@ -1,9 +1,7 @@
-﻿using Microsoft.AspNetCore.Http;
-using Microsoft.AspNetCore.Mvc;
+﻿using Microsoft.AspNetCore.Mvc;
 using ResourceHub.Application.Common.Mediator;
 using ResourceHub.Application.CQRS.Commands;
 using ResourceHub.Application.Dtos;
-using ResourceHub.Application.Interfaces;
 
 namespace ResourceHub.API.Controllers
 {
@@ -11,22 +9,16 @@ namespace ResourceHub.API.Controllers
     [ApiController]
     public class AuthorizationController : ControllerBase
     {
-        private readonly IJwtTokenJenerator _jwtTokenJenerator;
-        private readonly IUserInterface _userRepository;
         private readonly IMediator _mediator;
 
         public AuthorizationController(
-            IJwtTokenJenerator jwtTokenJenerator,
-            IUserInterface userRepository,
             IMediator mediator
             )
         {
-            _jwtTokenJenerator = jwtTokenJenerator;
-            _userRepository = userRepository;
             _mediator = mediator;
         }
 
-        [HttpPost]
+        [HttpPost("Login")]
         public async Task<ActionResult> Login(
         [FromBody] LoginDto loginDto,
         CancellationToken cancellationToken)
@@ -45,6 +37,24 @@ namespace ResourceHub.API.Controllers
             catch (Exception ex)
             {
                 return Unauthorized(ex.Message);
+            }
+        }
+        [HttpPost("AddNewUser")]
+        public async Task<ActionResult> AddNewUserController([FromBody] UserDto userDto, CancellationToken cancellationToken)
+        {
+            try
+            {
+                await _mediator.SendCommandAsync<AddNewUserCommand>(
+                     new AddNewUserCommand(userDto), cancellationToken
+                     );
+                return Ok(new
+                {
+                    Message = "User added successfully"
+                });
+            }
+            catch (Exception ex)
+            {
+                return BadRequest(ex.Message);
             }
         }
     }

@@ -6,14 +6,14 @@ namespace ResourceHub.Application.CQRS.Query.Handlers
 {
     internal class GetServiceWithFiltersHandler:IQueryRequestHandler
         <GetServicesWithFiltersQuery , 
-        PaginatedServiceResultDto<ServiceDto>>
+        PaginatedServiceResultDto<ServiceResponseDto>>
     {
         private readonly IServiceRepository _serviceRepository;
         public GetServiceWithFiltersHandler(IServiceRepository serviceRepository)
         {
             _serviceRepository = serviceRepository;
         }
-        public async Task<PaginatedServiceResultDto<ServiceDto>> HandlerAsync(
+        public async Task<PaginatedServiceResultDto<ServiceResponseDto>> HandlerAsync(
             GetServicesWithFiltersQuery request, 
             CancellationToken cancellationToken)
         {
