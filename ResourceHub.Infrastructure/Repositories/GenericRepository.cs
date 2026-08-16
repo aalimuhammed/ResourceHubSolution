@@ -26,6 +26,23 @@ namespace ResourceHub.Infrastructure.Repositories
             }
             return await _set.FirstOrDefaultAsync(cancellationToken);
         }
+        public async Task<bool> FindByAnyAsync(
+            Expression<Func<T,bool>>? filterByCondition = null,
+            CancellationToken cancellationToken = default)
+        {
+            if(filterByCondition is not null)
+            {
+                return await _set.AnyAsync(filterByCondition,cancellationToken);
+            }
 
+            return await _set.AnyAsync(cancellationToken);
+        }
+
+        public async Task<int> FindMaxAsync(
+            Expression<Func<T,int>> filterByCondition ,
+            CancellationToken cancellationToken = default)
+        {
+            return await _set.MaxAsync(filterByCondition, cancellationToken);
+        }
     }
 }

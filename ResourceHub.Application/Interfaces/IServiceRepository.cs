@@ -6,14 +6,14 @@ namespace ResourceHub.Application.Interfaces
     public interface IServiceRepository
     {
          Task<PaginatedServiceResultDto<ServiceResponseDto>> GetPagintedServices(
-            SearchFilterType  searchFilter,
+            SearchFilter searchFilter,
             CancellationToken cancellationToken = default);
 
          Task InsertNewService(
             ServiceDto serviceDto ,
             CancellationToken cancellationToken);
 
-         Task<bool> isActivityNoExists(string activityNumber);
+         Task<bool> IsActivityNoExists(string activityNumber , CancellationToken cancellationToken =default);
 
     }
 }

@@ -22,7 +22,7 @@ namespace ResourceHub.API.Controllers
 
         [HttpGet("getallservices")]
         public async Task<ActionResult<IEnumerable<ServiceResponseDto>>> GetServices(
-            [FromQuery] SearchFilterType searchFilter,
+            [FromQuery] SearchFilter searchFilter,
             CancellationToken cancellationToken = default)
         {
             var services = await _mediator.SendQueryAsync<GetServicesWithFiltersQuery,

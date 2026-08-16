@@ -31,7 +31,7 @@ namespace ResourceHub.Application.CQRS.Commands.Handlers
                 throw new ValidationException(vaildationResult.Errors);
             }
 
-            bool isActivityNoFound = await _serviceRepository.isActivityNoExists(request.ServiceDto.ActivityNo);
+            bool isActivityNoFound = await _serviceRepository.IsActivityNoExists(request.ServiceDto.ActivityNo);
 
             if (isActivityNoFound)
             {

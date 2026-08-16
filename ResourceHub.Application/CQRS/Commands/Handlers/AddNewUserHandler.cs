@@ -31,7 +31,7 @@ namespace ResourceHub.Application.CQRS.Commands.Handlers
 
             if (!validationResult.IsValid)
             {
-                throw new ValidationException(validationResult.Errors);
+                throw new ValidationException(validationResult.Errors.First().ErrorMessage);
             }
             try
             {

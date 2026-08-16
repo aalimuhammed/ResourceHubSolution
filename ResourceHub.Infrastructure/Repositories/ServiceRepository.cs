@@ -9,13 +9,18 @@ namespace ResourceHub.Infrastructure.Repositories
     public class ServiceRepository : IServiceRepository 
     {
         private readonly ResourceHubDbContext _context;
+        private readonly IGenericReposetory<Service> _genericServicesReposetory;
 
-        public ServiceRepository(ResourceHubDbContext context)
+        public ServiceRepository(
+            ResourceHubDbContext context ,
+            IGenericReposetory<Service> genericServicesReposetory
+            )
         {
             _context = context;
+            _genericServicesReposetory = genericServicesReposetory;
         }
         public async Task<PaginatedServiceResultDto<ServiceResponseDto>> GetPagintedServices(
-            SearchFilterType searchFilter,
+            SearchFilter searchFilter,
             CancellationToken cancellationToken = default)
         {
             IQueryable<Service> query = _context.Services;
@@ -69,11 +74,10 @@ namespace ResourceHub.Infrastructure.Repositories
         {
             try
             {
-                int lastCursorId = 1;
-
-                if (await _context.Services.AnyAsync(cancellationToken))
+                int lastCursorId = 0;
+                if(await _genericServicesReposetory.FindByAnyAsync(cancellationToken:cancellationToken))
                 {
-                   lastCursorId = await _context.Services.MaxAsync(s => s.CursorId, cancellationToken);
+                   lastCursorId = await _genericServicesReposetory.FindMaxAsync(s => s.CursorId, cancellationToken);
                 }
 
                 Service service = new Service
@@ -102,14 +106,14 @@ namespace ResourceHub.Infrastructure.Repositories
             }
         }
 
-        public async Task<bool> isActivityNoExists(string activityNumber)
+        public async Task<bool> IsActivityNoExists(string activityNumber , CancellationToken cancellationToken)
         {
-            return await _context.Services.AnyAsync(s=>s.ActivityNo == activityNumber);
+            return await _genericServicesReposetory.FindByAnyAsync(s => s.ActivityNo == activityNumber ,cancellationToken);
         }
 
         private IQueryable<Service> ApplyFilter(
             IQueryable<Service> query,
-            SearchFilterType searchFilter)
+            SearchFilter searchFilter)
         {
             if (searchFilter.lastCursorId.HasValue)
             {
