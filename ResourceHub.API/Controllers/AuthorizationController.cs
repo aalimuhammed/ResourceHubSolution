@@ -24,14 +24,11 @@ namespace ResourceHub.API.Controllers
         {
             try
             {
-                var token = await _mediator.SendCommandAsync<LoginCommand, LoginResponseDto>(
+                var loginResponse = await _mediator.SendCommandAsync<LoginCommand, LoginResponseDto>(
                     new LoginCommand(loginDto),
                     cancellationToken);
 
-                return Ok(new
-                {
-                    Token = token
-                });
+                return Ok(loginResponse);
             }
             catch(KeyNotFoundException ex)
             {
