@@ -67,13 +67,9 @@ namespace ResourceHub.Infrastructure.Repositories
         
         public async Task InsertNewService(ServiceDto serviceDto, CancellationToken cancellationToken)
         {
-            if (serviceDto is null)
-            {
-                throw new Exception("Fields cannot be null.");
-            }
             try
             {
-                int lastCursorId = 0;
+                int lastCursorId = 1;
 
                 if (await _context.Services.AnyAsync(cancellationToken))
                 {

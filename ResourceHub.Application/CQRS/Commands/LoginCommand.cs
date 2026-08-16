@@ -6,5 +6,5 @@ using System.Text;
 
 namespace ResourceHub.Application.CQRS.Commands
 {
-    public record LoginCommand(LoginDto LoginDto) : ICommandRequest<string>;
+    public record LoginCommand(LoginDto LoginDto) : ICommandRequest<LoginResponseDto>;
 }

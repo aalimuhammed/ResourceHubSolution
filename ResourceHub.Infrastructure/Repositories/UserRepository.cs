@@ -27,10 +27,6 @@ namespace ResourceHub.Infrastructure.Repositories
 
         public async Task AddNewUserAsync(CreateUserDto userDto, CancellationToken cancellationToken)
         {
-            if (userDto is null )
-            {
-                throw new ArgumentException($"Fields Can't be null");
-            }
 
             if( _resourceHubDbContext.Users.Any(u => u.Email == userDto.Email))
             {
