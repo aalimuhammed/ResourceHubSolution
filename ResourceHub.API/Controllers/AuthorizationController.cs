@@ -24,7 +24,7 @@ namespace ResourceHub.API.Controllers
         {
             try
             {
-                var token = await _mediator.SendCommandAsync<LoginCommand, string>(
+                var token = await _mediator.SendCommandAsync<LoginCommand, LoginResponseDto>(
                     new LoginCommand(loginDto),
                     cancellationToken);
 
