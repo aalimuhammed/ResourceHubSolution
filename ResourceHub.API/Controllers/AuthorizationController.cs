@@ -2,6 +2,7 @@
 using ResourceHub.Application.Common.Mediator;
 using ResourceHub.Application.CQRS.Commands;
 using ResourceHub.Application.Dtos;
+using System.Data;
 
 namespace ResourceHub.API.Controllers
 {
@@ -11,9 +12,7 @@ namespace ResourceHub.API.Controllers
     {
         private readonly IMediator _mediator;
 
-        public AuthorizationController(
-            IMediator mediator
-            )
+        public AuthorizationController(IMediator mediator)
         {
             _mediator = mediator;
         }
@@ -34,13 +33,21 @@ namespace ResourceHub.API.Controllers
                     Token = token
                 });
             }
+            catch(KeyNotFoundException)
+            {
+                return NotFound();
+            }
+            catch(UnauthorizedAccessException)
+            {
+                return Unauthorized();
+            }
             catch (Exception ex)
             {
                 return Unauthorized(ex.Message);
             }
         }
         [HttpPost("AddNewUser")]
-        public async Task<ActionResult> AddNewUserController([FromBody] UserDto userDto, CancellationToken cancellationToken)
+        public async Task<ActionResult> AddNewUser([FromBody] CreateUserDto userDto, CancellationToken cancellationToken)
         {
             try
             {
@@ -52,9 +59,17 @@ namespace ResourceHub.API.Controllers
                     Message = "User added successfully"
                 });
             }
+            catch (ArgumentException)
+            {
+                return BadRequest();
+            }
+            catch (DuplicateNameException)
+            {
+                return Conflict();
+            }
             catch (Exception ex)
             {
-                return BadRequest(ex.Message);
+                return StatusCode(404, ex.Message);
             }
         }
     }

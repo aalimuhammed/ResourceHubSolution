@@ -9,13 +9,13 @@ using System.Text;
 
 namespace ResourceHub.Infrastructure.Services
 {
-    internal class TokenService: IJwtTokenJenerator
+    internal class TokenService: IJwtTokenGenerator
     {
-        private readonly IOptions<JwtSettings> _userOptions;
+        private readonly IOptions<JwtSettings> _jwtsettings;
 
-        public TokenService(IOptions<JwtSettings> userOptions)
+        public TokenService(IOptions<JwtSettings> jwtsettings)
         {
-            _userOptions = userOptions;
+            _jwtsettings = jwtsettings;
         }
 
         public string GenerateToken(Users user)
@@ -24,14 +24,14 @@ namespace ResourceHub.Infrastructure.Services
             {
                 new Claim(ClaimTypes.Name, user.UserName),
             };
-            var key = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(_userOptions.Value.SecretKey));
+            var key = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(_jwtsettings.Value.SecretKey));
             
             var credentials= new SigningCredentials(key, SecurityAlgorithms.HmacSha256);
 
             var token= new JwtSecurityToken(
                 claims: claims,
-                issuer: _userOptions.Value.issuer,
-                audience: _userOptions.Value.audience,
+                issuer: _jwtsettings.Value.issuer,
+                audience: _jwtsettings.Value.audience,
                 expires: DateTime.Now.AddMinutes(60),
                 signingCredentials: credentials
             );

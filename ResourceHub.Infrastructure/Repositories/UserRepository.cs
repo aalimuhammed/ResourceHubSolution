@@ -1,28 +1,42 @@
-﻿using Microsoft.EntityFrameworkCore;
+﻿using Microsoft.AspNetCore.Http.HttpResults;
+using Microsoft.EntityFrameworkCore;
 using ResourceHub.Application.Dtos;
 using ResourceHub.Application.Interfaces;
 using ResourceHub.Domain.Entities;
 using ResourceHub.Infrastructure.Contexts;
+using System.Data;
 
 namespace ResourceHub.Infrastructure.Repositories
 {
-    public class UserRepository : IUserInterface
+    public class UserRepository : IUserRepository
     {
         private readonly ResourceHubDbContext _resourceHubDbContext;
         private readonly IPasswordService _passwordService;
+        private readonly IGenericReposetory<Users> _genericUserReposetory;
 
-        public UserRepository(ResourceHubDbContext resourceHubDbContext, IPasswordService passwordService)
+        public UserRepository(
+            ResourceHubDbContext resourceHubDbContext,
+            IPasswordService passwordService,
+            IGenericReposetory<Users> genericUserReposetory
+            )
         {
             _resourceHubDbContext = resourceHubDbContext;
             _passwordService = passwordService;
+            _genericUserReposetory = genericUserReposetory;
         }
 
-        public async Task AddNewUserAsync(UserDto userDto, CancellationToken cancellationToken)
+        public async Task AddNewUserAsync(CreateUserDto userDto, CancellationToken cancellationToken)
         {
-            if (userDto is null || !CheckNullability(userDto))
+            if (userDto is null )
             {
-                throw new Exception($"Fields Can't be null");
+                throw new ArgumentException($"Fields Can't be null");
             }
+
+            if( _resourceHubDbContext.Users.Any(u => u.Email == userDto.Email))
+            {
+                throw new DuplicateNameException("User already Exists");
+            }
+
             try
             {
                 var user = new Users
@@ -42,35 +56,21 @@ namespace ResourceHub.Infrastructure.Repositories
 
         public async Task<Users> LoginAsync(LoginDto loginDto, CancellationToken cancellationToken)
         {
-            var user = await _resourceHubDbContext.Users.FirstOrDefaultAsync(u => u.Email == loginDto.email);
+            var user = await _genericUserReposetory.GetByFirstOrDefault(u => u.Email == loginDto.email);
 
             if (user is null)
             {
-                throw new Exception("User not found.");
+                throw new KeyNotFoundException("User not found.");
             }
 
             bool verifyPassword = _passwordService.VerifyPassword(loginDto.password, user.Password);
 
             if (!verifyPassword)
             {
-                throw new Exception("Invalid Email Or Password.");
+                throw new UnauthorizedAccessException("Invalid Email Or Password.");
             }
 
             return user;
-        }
-
-        private bool CheckNullability(UserDto userDto)
-        {
-            if (
-                userDto.FullName is null ||
-                userDto.UserName is null ||
-                userDto.Password is null ||
-                userDto.Email is null
-                )
-            {
-                return false;
-            }
-            else { return true; }
         }
     }
 }

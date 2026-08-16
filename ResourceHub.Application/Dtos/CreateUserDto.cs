@@ -5,7 +5,7 @@ using System.Text;
 
 namespace ResourceHub.Application.Dtos
 {
-    public class UserDto
+    public class CreateUserDto
     {
         public string FullName { get; set; } = null!;
         public string UserName { get; set; } = null!;

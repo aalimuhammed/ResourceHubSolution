@@ -67,13 +67,18 @@ namespace ResourceHub.Infrastructure.Repositories
         
         public async Task InsertNewService(ServiceDto serviceDto, CancellationToken cancellationToken)
         {
-            if (!CheckNullability(serviceDto) && serviceDto is null)
+            if (serviceDto is null)
             {
                 throw new Exception("Fields cannot be null.");
             }
             try
             {
-                int lastCursorId=_context.Services.Max(s =>s.CursorId);
+                int lastCursorId = 0;
+
+                if (await _context.Services.AnyAsync(cancellationToken))
+                {
+                   lastCursorId = await _context.Services.MaxAsync(s => s.CursorId, cancellationToken);
+                }
 
                 Service service = new Service
                 {
@@ -106,24 +111,6 @@ namespace ResourceHub.Infrastructure.Repositories
             return await _context.Services.AnyAsync(s=>s.ActivityNo == activityNumber);
         }
 
-        private bool CheckNullability(ServiceDto serviceDto)
-        {
-            if (serviceDto.ActivityNo==null ||
-                serviceDto.Division == null ||
-                serviceDto.Unit == null ||
-                serviceDto.ServiceCat == null ||
-                serviceDto.ChangedBy == null ||
-                serviceDto.CreatedBy == null ||
-                serviceDto.ShortTxt == null ||
-                serviceDto.LongTxt == null ||
-                serviceDto.PrimaryLang == null ||
-                serviceDto.ValuationClass == null
-                )
-            {
-                return false;
-            }
-            else { return true; }
-        }
         private IQueryable<Service> ApplyFilter(
             IQueryable<Service> query,
             SearchFilterType searchFilter)

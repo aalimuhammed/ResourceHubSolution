@@ -3,6 +3,7 @@ using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.IdentityModel.Tokens;
+using ResourceHub.Application.Dtos;
 using ResourceHub.Application.Interfaces;
 using ResourceHub.Infrastructure.Contexts;
 using ResourceHub.Infrastructure.Repositories;
@@ -23,15 +24,18 @@ namespace ResourceHub.Infrastructure.Extenions
             options.UseMySql(connectionString, ServerVersion.AutoDetect(connectionString))
                .UseSnakeCaseNamingConvention());
 
+            services.Configure<JwtSettings>(
+            configuration.GetSection("jwtsettings"));
+
             services.AddHttpClient<IResourceHubExternalService, ResourceHubExternalService>();
 
-            services.AddScoped<IJwtTokenJenerator, TokenService>();
+            services.AddSingleton<IJwtTokenGenerator, TokenService>();
 
-            services.AddScoped<IPasswordService, PasswordService>();
+            services.AddSingleton<IPasswordService, PasswordService>();
 
             services.AddScoped<IUnitOfWork, UnitOfWork>();
 
-            services.AddScoped<IUserInterface, UserRepository>();
+            services.AddScoped<IUserRepository, UserRepository>();
 
             services.AddScoped<IServiceRepository,ServiceRepository>();
 

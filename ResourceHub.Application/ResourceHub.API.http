@@ -1,0 +1,6 @@
+@ResourceHub.API_HostAddress = http://localhost:5147
+
+GET {{ResourceHub.API_HostAddress}}/weatherforecast/
+Accept: application/json
+
+###

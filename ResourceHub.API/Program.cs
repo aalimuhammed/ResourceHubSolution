@@ -8,9 +8,6 @@ var builder = WebApplication.CreateBuilder(args);
 
 builder.Services.AddInfarstructureService(builder.Configuration)
     .AddApplicationService();
-
-builder.Services.Configure<JwtSettings>(
-    builder.Configuration.GetSection("jwtsettings"));
     
 builder.Services.AddControllers();
 
@@ -33,7 +30,6 @@ try
         var context = scope.ServiceProvider.GetRequiredService<ResourceHubDbContext>();
         await SeedData.InitializeData(context);
     }
-
 }
 catch (Exception ex)
 {

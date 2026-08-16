@@ -6,6 +6,5 @@ using System.Text;
 
 namespace ResourceHub.Application.CQRS.Commands
 {
-    public record AddNewUserCommand(UserDto UserDto):ICommandRequest;
-    
+    public record AddNewUserCommand(CreateUserDto UserDto) : ICommandRequest;
 }

@@ -9,7 +9,6 @@ namespace ResourceHub.Infrastructure.Seed
         {
              await SeedUsers(context);
         }
-
          public static async Task SeedUsers(ResourceHubDbContext context)
          {
              if (!context.Users.Any())
@@ -21,7 +20,6 @@ namespace ResourceHub.Infrastructure.Seed
                              Password = BCrypt.Net.BCrypt.HashPassword("123456"),
                              FullName = "Shada Adly",
                              UserName= "shada.adly",
-                             CreatedAt = DateTime.Now,
                          }
                    );
                     await context.SaveChangesAsync();

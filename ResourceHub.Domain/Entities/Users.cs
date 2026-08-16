@@ -11,6 +11,5 @@ namespace ResourceHub.Domain.Entities
 
         [EmailAddress]
         public string Email { get; set; } = null!;
-
     }
 }

@@ -5,8 +5,8 @@ using System.Text;
 
 namespace ResourceHub.Application.Interfaces
 {
-    public interface IJwtTokenJenerator
+    public interface IJwtTokenGenerator
     {
-        public string GenerateToken(Users user);
+         string GenerateToken(Users user);
     }
 }

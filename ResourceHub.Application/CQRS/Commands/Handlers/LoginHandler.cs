@@ -5,10 +5,10 @@ namespace ResourceHub.Application.CQRS.Commands.Handlers
 {
     internal class LoginHandler : ICommandRequestHandler<LoginCommand , string>
     {
-        private readonly IUserInterface _userRepository;
-        private readonly IJwtTokenJenerator _jwtTokenJenerator;
+        private readonly IUserRepository _userRepository;
+        private readonly IJwtTokenGenerator _jwtTokenJenerator;
 
-        public LoginHandler(IUserInterface userRepository, IJwtTokenJenerator jwtTokenJenerator)
+        public LoginHandler(IUserRepository userRepository, IJwtTokenGenerator jwtTokenJenerator)
         {
             _userRepository = userRepository;
             _jwtTokenJenerator = jwtTokenJenerator;

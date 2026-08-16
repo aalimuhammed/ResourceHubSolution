@@ -6,9 +6,9 @@ using System.Text;
 
 namespace ResourceHub.Application.Interfaces
 {
-    public interface IUserInterface
-    {
+    public interface IUserRepository
+	{
         Task<Users> LoginAsync(LoginDto loginDto, CancellationToken cancellationToken);
-        Task AddNewUserAsync(UserDto userDto , CancellationToken cancellationToken);
+        Task AddNewUserAsync(CreateUserDto userDto , CancellationToken cancellationToken);
     }
 }
