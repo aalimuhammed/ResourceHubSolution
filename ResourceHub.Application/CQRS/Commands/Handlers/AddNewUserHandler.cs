@@ -4,6 +4,7 @@ using ResourceHub.Application.Dtos;
 using ResourceHub.Application.Interfaces;
 using System;
 using System.Collections.Generic;
+using System.Data;
 using System.Text;
 
 namespace ResourceHub.Application.CQRS.Commands.Handlers
@@ -37,6 +38,14 @@ namespace ResourceHub.Application.CQRS.Commands.Handlers
                 await _userRepository.AddNewUserAsync(request.UserDto, cancellationToken);
 
                 await _unitOfWork.SaveChangesAsync(cancellationToken);
+            }
+            catch (ArgumentException ex)
+            {
+                throw new ArgumentException($"{ex.Message}");
+            }
+            catch (DuplicateNameException ex)
+            {
+                throw new DuplicateNameException($"{ex.Message}");
             }
             catch (Exception ex)
             {

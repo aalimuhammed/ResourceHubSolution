@@ -33,13 +33,13 @@ namespace ResourceHub.API.Controllers
                     Token = token
                 });
             }
-            catch(KeyNotFoundException)
+            catch(KeyNotFoundException ex)
             {
-                return NotFound();
+                return NotFound(ex.Message);
             }
-            catch(UnauthorizedAccessException)
+            catch(UnauthorizedAccessException ex)
             {
-                return Unauthorized();
+                return Unauthorized(ex.Message);
             }
             catch (Exception ex)
             {
