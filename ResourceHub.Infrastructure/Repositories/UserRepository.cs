@@ -12,23 +12,23 @@ namespace ResourceHub.Infrastructure.Repositories
     {
         private readonly ResourceHubDbContext _resourceHubDbContext;
         private readonly IPasswordService _passwordService;
-        private readonly IGenericReposetory<Users> _genericUserReposetory;
+        private readonly IGenericReposetory<Users> _genericUserRepository;
 
         public UserRepository(
             ResourceHubDbContext resourceHubDbContext,
             IPasswordService passwordService,
-            IGenericReposetory<Users> genericUserReposetory
+            IGenericReposetory<Users> genericUserRepository
             )
         {
             _resourceHubDbContext = resourceHubDbContext;
             _passwordService = passwordService;
-            _genericUserReposetory = genericUserReposetory;
+            _genericUserRepository = genericUserRepository;
         }
 
         public async Task AddNewUserAsync(CreateUserDto userDto, CancellationToken cancellationToken)
         {
 
-            if( _resourceHubDbContext.Users.Any(u => u.Email == userDto.Email))
+            if( await _genericUserRepository.FindByAnyAsync(u => u.Email == userDto.Email))
             {
                 throw new DuplicateNameException("User already Exists");
             }
@@ -52,7 +52,7 @@ namespace ResourceHub.Infrastructure.Repositories
 
         public async Task<Users> LoginAsync(LoginDto loginDto, CancellationToken cancellationToken)
         {
-            var user = await _genericUserReposetory.GetByFirstOrDefault(u => u.Email == loginDto.email);
+            var user = await _genericUserRepository.GetByFirstOrDefault(u => u.Email == loginDto.email);
 
             if (user is null)
             {

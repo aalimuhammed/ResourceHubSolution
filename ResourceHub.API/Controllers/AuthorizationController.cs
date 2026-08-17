@@ -56,17 +56,17 @@ namespace ResourceHub.API.Controllers
                     Message = "User added successfully"
                 });
             }
-            catch (ArgumentException)
+            catch (ArgumentException ex)
             {
-                return BadRequest();
+                return BadRequest(ex.Message);
             }
-            catch (DuplicateNameException)
+            catch (DuplicateNameException ex)
             {
-                return Conflict();
+                return Conflict(ex.Message);
             }
             catch (Exception ex)
             {
-                return StatusCode(404, ex.Message);
+                return StatusCode(500, ex.Message);
             }
         }
     }

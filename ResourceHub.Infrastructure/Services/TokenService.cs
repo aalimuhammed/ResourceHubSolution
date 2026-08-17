@@ -11,11 +11,11 @@ namespace ResourceHub.Infrastructure.Services
 {
     internal class TokenService: IJwtTokenGenerator
     {
-        private readonly IOptions<JwtSettings> _jwtsettings;
+        private readonly JwtSettings _jwtsettings;
 
         public TokenService(IOptions<JwtSettings> jwtsettings)
         {
-            _jwtsettings = jwtsettings;
+            _jwtsettings = jwtsettings.Value;
         }
 
         public string GenerateToken(Users user)
@@ -24,14 +24,14 @@ namespace ResourceHub.Infrastructure.Services
             {
                 new Claim(ClaimTypes.Name, user.UserName),
             };
-            var key = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(_jwtsettings.Value.SecretKey));
+            var key = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(_jwtsettings.SecretKey));
             
             var credentials= new SigningCredentials(key, SecurityAlgorithms.HmacSha256);
 
             var token= new JwtSecurityToken(
                 claims: claims,
-                issuer: _jwtsettings.Value.issuer,
-                audience: _jwtsettings.Value.audience,
+                issuer: _jwtsettings.issuer,
+                audience: _jwtsettings.audience,
                 expires: DateTime.Now.AddMinutes(60),
                 signingCredentials: credentials
             );

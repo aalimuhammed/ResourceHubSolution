@@ -14,7 +14,7 @@ namespace ResourceHub.Application.Interfaces
          Task<bool> FindByAnyAsync(
             Expression<Func<T, bool>>? filterByCondition = null,
             CancellationToken cancellationToken = default);
-        public Task<int> FindMaxAsync(
+         Task<int> FindMaxAsync(
             Expression<Func<T, int>> filterByCondition,
             CancellationToken cancellationToken = default);
     }

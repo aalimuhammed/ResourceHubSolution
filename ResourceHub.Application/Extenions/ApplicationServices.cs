@@ -13,6 +13,8 @@ namespace ResourceHub.Application.Extenions
 
             services.AddValidatorsFromAssemblyContaining<CreateServiceDtoValidator>();
 
+            services.AddValidatorsFromAssemblyContaining<CreateUserDtoValidtaor>();
+
             return services;
         }
         

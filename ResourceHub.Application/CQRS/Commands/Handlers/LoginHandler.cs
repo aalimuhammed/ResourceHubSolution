@@ -37,7 +37,7 @@ namespace ResourceHub.Application.CQRS.Commands.Handlers
             }
             catch (Exception ex)
             {
-                throw new Exception($"An error occurred while processing the login request: ",ex);
+                throw new Exception($"An error occurred while processing the login request: ",ex.InnerException);
             }
         }
     }

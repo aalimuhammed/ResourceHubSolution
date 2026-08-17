@@ -28,7 +28,7 @@ namespace ResourceHub.Application.CQRS.Commands.Handlers
 
             if (!vaildationResult.IsValid)
             {
-                throw new ValidationException(vaildationResult.Errors);
+                throw new ValidationException(vaildationResult.Errors.First().ErrorMessage);
             }
 
             bool isActivityNoFound = await _serviceRepository.IsActivityNoExists(request.ServiceDto.ActivityNo);
