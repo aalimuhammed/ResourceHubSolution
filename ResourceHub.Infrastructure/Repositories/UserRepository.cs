@@ -12,12 +12,12 @@ namespace ResourceHub.Infrastructure.Repositories
     {
         private readonly ResourceHubDbContext _resourceHubDbContext;
         private readonly IPasswordService _passwordService;
-        private readonly IGenericReposetory<Users> _genericUserRepository;
+        private readonly IGenericRepository<Users> _genericUserRepository;
 
         public UserRepository(
             ResourceHubDbContext resourceHubDbContext,
             IPasswordService passwordService,
-            IGenericReposetory<Users> genericUserRepository
+            IGenericRepository<Users> genericUserRepository
             )
         {
             _resourceHubDbContext = resourceHubDbContext;

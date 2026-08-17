@@ -41,7 +41,7 @@ namespace ResourceHub.Infrastructure.Extenions
 
             services.AddScoped<IResourceHubInternalService, ResourceHubInternalService>();
 
-            services.AddScoped(typeof(IGenericReposetory<>), typeof(GenericRepository<>));
+            services.AddScoped(typeof(IGenericRepository<>), typeof(GenericRepository<>));
 
             services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme)
                .AddJwtBearer(options => options.TokenValidationParameters = new TokenValidationParameters

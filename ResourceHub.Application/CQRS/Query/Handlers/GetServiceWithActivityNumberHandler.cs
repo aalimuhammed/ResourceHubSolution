@@ -8,8 +8,8 @@ namespace ResourceHub.Application.CQRS.Query.Handlers
     internal class GetServiceWithActivityNumberHandler :
         IQueryRequestHandler<GetServiceWithActivityNumberQuery, ServiceDto>
     {
-        private readonly IGenericReposetory<Service> _serviceRepository;
-        public GetServiceWithActivityNumberHandler(IGenericReposetory<Service> serviceRepository)
+        private readonly IGenericRepository<Service> _serviceRepository;
+        public GetServiceWithActivityNumberHandler(IGenericRepository<Service> serviceRepository)
         {
             _serviceRepository = serviceRepository;
         }

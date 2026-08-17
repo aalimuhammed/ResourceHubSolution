@@ -30,14 +30,14 @@ namespace ResourceHub.Application.CQRS.Commands.Handlers
             catch (KeyNotFoundException ex) 
             {
                 throw new KeyNotFoundException($"{ex.Message}");
-            }
+            } 
             catch (UnauthorizedAccessException ex)
             {
                 throw new UnauthorizedAccessException($"{ex.Message}");
             }
             catch (Exception ex)
             {
-                throw new Exception($"An error occurred while processing the login request: ",ex.InnerException);
+                throw new Exception($"An error occurred while processing the login request :{ex.Message}",ex);
             }
         }
     }

@@ -6,7 +6,7 @@ namespace ResourceHub.Application.Dtos
 {
     public class ServiceResponseDto
     {
-        public int CursorId { get; set; }
+        public int ? CursorId { get; set; }
         public string ActivityNo { get; set; } = null!;
         public DateOnly CreatedOn { get; set; }
         public string CreatedBy { get; set; } = null!;

@@ -6,7 +6,7 @@ using System.Text;
 
 namespace ResourceHub.Application.Interfaces
 {
-    public interface IGenericReposetory<T> 
+    public interface IGenericRepository<T> 
     {
          Task<T?> GetByFirstOrDefault(
             Expression<Func<T, bool>> filterByCondition,
@@ -14,8 +14,8 @@ namespace ResourceHub.Application.Interfaces
          Task<bool> FindByAnyAsync(
             Expression<Func<T, bool>>? filterByCondition = null,
             CancellationToken cancellationToken = default);
-         Task<int> FindMaxAsync(
-            Expression<Func<T, int>> filterByCondition,
+         Task<int?> FindMaxAsync(
+            Expression<Func<T, int?>> filterByCondition,
             CancellationToken cancellationToken = default);
     }
 }

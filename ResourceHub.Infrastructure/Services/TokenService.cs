@@ -24,7 +24,7 @@ namespace ResourceHub.Infrastructure.Services
             {
                 new Claim(ClaimTypes.Name, user.UserName),
             };
-            var key = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(_jwtsettings.SecretKey));
+            var key = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(_jwtsettings.secretKey));
             
             var credentials= new SigningCredentials(key, SecurityAlgorithms.HmacSha256);
 

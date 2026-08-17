@@ -9,11 +9,11 @@ namespace ResourceHub.Infrastructure.Repositories
     public class ServiceRepository : IServiceRepository 
     {
         private readonly ResourceHubDbContext _context;
-        private readonly IGenericReposetory<Service> _genericServicesReposetory;
+        private readonly IGenericRepository<Service> _genericServicesReposetory;
 
         public ServiceRepository(
             ResourceHubDbContext context ,
-            IGenericReposetory<Service> genericServicesReposetory
+            IGenericRepository<Service> genericServicesReposetory
             )
         {
             _context = context;
@@ -74,10 +74,18 @@ namespace ResourceHub.Infrastructure.Repositories
         {
             try
             {
-                int lastCursorId = 0;
-                if(await _genericServicesReposetory.FindByAnyAsync(cancellationToken:cancellationToken))
+                int? lastCursorId = 0 ;
+
+                var x = await _genericServicesReposetory.FindByAnyAsync(cancellationToken: cancellationToken);
+
+                if (!await _genericServicesReposetory.FindByAnyAsync(cancellationToken:cancellationToken))
                 {
                    lastCursorId = await _genericServicesReposetory.FindMaxAsync(s => s.CursorId, cancellationToken);
+                }
+
+                if (lastCursorId == null)
+                {
+                    lastCursorId = 0;
                 }
 
                 Service service = new Service
