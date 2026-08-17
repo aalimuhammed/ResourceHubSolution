@@ -1,6 +1,6 @@
 ﻿namespace ResourceHub.Application.Dtos
 {
-    public class SearchFilterType 
+    public class SearchFilter
     {
         public  int PageSize { get;} = 10;
         public int ? lastCursorId { get; set; }

@@ -1,14 +1,16 @@
-﻿using ResourceHub.Domain.Base;
+﻿using System;
+using System.Collections.Generic;
+using System.Text;
 
-namespace ResourceHub.Domain.Entities
+namespace ResourceHub.Application.Dtos
 {
-    public class Service : BaseEntity
+    public class ServiceResponseDto
     {
         public int ? CursorId { get; set; }
         public string ActivityNo { get; set; } = null!;
-        public DateOnly CreatedOn { get; set; } 
+        public DateOnly CreatedOn { get; set; }
         public string CreatedBy { get; set; } = null!;
-        public DateOnly ChangedOn { get; set; } 
+        public DateOnly ChangedOn { get; set; }
         public string ChangedBy { get; set; } = null!;
         public string MaterialGroup { get; set; } = null!;
         public string ServiceCat { get; set; } = null!;

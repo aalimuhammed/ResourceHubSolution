@@ -1,20 +1,19 @@
 ﻿using ResourceHub.Application.Dtos;
-using System;
-using System.Collections.Generic;
-using System.Text;
+using ResourceHub.Domain.Entities;
 
 namespace ResourceHub.Application.Interfaces
 {
     public interface IServiceRepository
     {
-         Task<PaginatedServiceResultDto<ServiceDto>> GetPagintedServices(
-            SearchFilterType  searchFilter,
+         Task<PaginatedServiceResultDto<ServiceResponseDto>> GetPagintedServices(
+            SearchFilter searchFilter,
             CancellationToken cancellationToken = default);
 
          Task InsertNewService(
             ServiceDto serviceDto ,
             CancellationToken cancellationToken);
 
-         Task<bool> isActivityNoExists(string activityNumber);
+         Task<bool> IsActivityNoExists(string activityNumber , CancellationToken cancellationToken =default);
+
     }
 }

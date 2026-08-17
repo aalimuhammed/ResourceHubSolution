@@ -8,8 +8,8 @@ namespace ResourceHub.Application.CQRS.Query.Handlers
     internal class GetServiceWithActivityNumberHandler :
         IQueryRequestHandler<GetServiceWithActivityNumberQuery, ServiceDto>
     {
-        private readonly IGenericReposetory<Service> _serviceRepository;
-        public GetServiceWithActivityNumberHandler(IGenericReposetory<Service> serviceRepository)
+        private readonly IGenericRepository<Service> _serviceRepository;
+        public GetServiceWithActivityNumberHandler(IGenericRepository<Service> serviceRepository)
         {
             _serviceRepository = serviceRepository;
         }
@@ -28,7 +28,6 @@ namespace ResourceHub.Application.CQRS.Query.Handlers
 
             var serviceDto = new ServiceDto()
             {
-                CursorId = service.CursorId,
                 ActivityNo = service.ActivityNo,
                 CreatedOn = service.CreatedOn,
                 CreatedBy = service.CreatedBy,

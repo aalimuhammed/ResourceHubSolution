@@ -1,7 +1,8 @@
 ﻿using Microsoft.Extensions.DependencyInjection;
 using ResourceHub.Application.Common.Mediator;
+using ResourceHub.Application.Validators;
 using System.Reflection;
-
+using FluentValidation;
 namespace ResourceHub.Application.Extenions
 {
     public static class ApplicationServices
@@ -10,8 +11,13 @@ namespace ResourceHub.Application.Extenions
         {
             services.AddMediator(Assembly.GetExecutingAssembly());
 
+            services.AddValidatorsFromAssemblyContaining<CreateServiceDtoValidator>();
+
+            services.AddValidatorsFromAssemblyContaining<CreateUserDtoValidtaor>();
+
             return services;
         }
+        
         private static IServiceCollection AddMediator(this IServiceCollection services, Assembly assembly)
         {
             services.AddScoped<IMediator, Mediator>();

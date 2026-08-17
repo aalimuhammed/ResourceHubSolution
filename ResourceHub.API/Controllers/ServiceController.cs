@@ -20,13 +20,13 @@ namespace ResourceHub.API.Controllers
             _mediator = mediator;
         }
 
-        [HttpGet("getallservices")]
-        public async Task<ActionResult<IEnumerable<ServiceDto>>> GetServices(
-            [FromQuery] SearchFilterType searchFilter,
+        [HttpGet("GetAllServices")]
+        public async Task<ActionResult<IEnumerable<ServiceResponseDto>>> GetServices(
+            [FromQuery] SearchFilter searchFilter,
             CancellationToken cancellationToken = default)
         {
             var services = await _mediator.SendQueryAsync<GetServicesWithFiltersQuery,
-                PaginatedServiceResultDto<ServiceDto>>
+                PaginatedServiceResultDto<ServiceResponseDto>>
                 (new GetServicesWithFiltersQuery(searchFilter), cancellationToken);
 
             if (services.ServicesDto.Any())
@@ -37,7 +37,7 @@ namespace ResourceHub.API.Controllers
             return NotFound("No Services found.");
         }
 
-        [HttpGet("getbyactivitynumber")]
+        [HttpGet("GetByActivityNumber")]
         public async Task<ActionResult<ServiceDto>> GetServiceByActivityNumber(
             [FromQuery] string activityNumber,
              CancellationToken cancellationToken
@@ -55,7 +55,7 @@ namespace ResourceHub.API.Controllers
             }
         }
 
-        [HttpPost("createnewservice")]
+        [HttpPost("CreateNewService")]
         public async Task<ActionResult> InsertNewServiceController(
             [FromBody] ServiceDto serviceDto,
             CancellationToken cancellationToken = default)

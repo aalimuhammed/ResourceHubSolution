@@ -4,7 +4,7 @@ using ResourceHub.Application.Dtos;
 namespace ResourceHub.Application.CQRS.Query
 {
     public record GetServicesWithFiltersQuery(
-      SearchFilterType SearchFilterType
-        ):IQueryRequest<PaginatedServiceResultDto<ServiceDto>>;
+      SearchFilter SearchFilterType
+        ):IQueryRequest<PaginatedServiceResultDto<ServiceResponseDto>>;
     
 }

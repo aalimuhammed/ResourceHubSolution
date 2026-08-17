@@ -9,12 +9,18 @@ namespace ResourceHub.Infrastructure.Repositories
     public class ServiceRepository : IServiceRepository 
     {
         private readonly ResourceHubDbContext _context;
-        public ServiceRepository(ResourceHubDbContext context )
+        private readonly IGenericRepository<Service> _genericServicesReposetory;
+
+        public ServiceRepository(
+            ResourceHubDbContext context ,
+            IGenericRepository<Service> genericServicesReposetory
+            )
         {
             _context = context;
+            _genericServicesReposetory = genericServicesReposetory;
         }
-        public async Task<PaginatedServiceResultDto<ServiceDto>> GetPagintedServices(
-            SearchFilterType searchFilter,
+        public async Task<PaginatedServiceResultDto<ServiceResponseDto>> GetPagintedServices(
+            SearchFilter searchFilter,
             CancellationToken cancellationToken = default)
         {
             IQueryable<Service> query = _context.Services;
@@ -34,8 +40,9 @@ namespace ResourceHub.Infrastructure.Repositories
                 .OrderBy(s => s.CursorId)
                 .Take(pagesize + 1); 
 
-            var items = await query.Select(s => new ServiceDto
+            var items = await query.Select(s => new ServiceResponseDto
             {
+                CursorId = s.CursorId,
                 DeletionInd = s.DeletionInd,
                 Unit = s.Unit,
                 ChangedOn = s.ChangedOn,
@@ -50,11 +57,10 @@ namespace ResourceHub.Infrastructure.Repositories
                 ServiceCat = s.ServiceCat,
                 ShortTxt = s.ShortTxt,
                 ValuationClass = s.ValuationClass,
-                CursorId = s.CursorId
                
             }).ToListAsync(cancellationToken); 
 
-            var result = new PaginatedServiceResultDto<ServiceDto>
+            var result = new PaginatedServiceResultDto<ServiceResponseDto>
             {
                 ServicesDto = items.Take(pagesize),
 
@@ -63,16 +69,28 @@ namespace ResourceHub.Infrastructure.Repositories
 
             return result;
         }
+        
         public async Task InsertNewService(ServiceDto serviceDto, CancellationToken cancellationToken)
         {
-            if (!CheckNullability(serviceDto) && serviceDto is null)
-            {
-                throw new Exception("Fields cannot be null.");
-            }
             try
             {
+                int? lastCursorId = 0 ;
+
+                var x = await _genericServicesReposetory.FindByAnyAsync(cancellationToken: cancellationToken);
+
+                if (!await _genericServicesReposetory.FindByAnyAsync(cancellationToken:cancellationToken))
+                {
+                   lastCursorId = await _genericServicesReposetory.FindMaxAsync(s => s.CursorId, cancellationToken);
+                }
+
+                if (lastCursorId == null)
+                {
+                    lastCursorId = 0;
+                }
+
                 Service service = new Service
                 {
+                    CursorId = lastCursorId + 1,
                     DeletionInd = serviceDto.DeletionInd,
                     Unit = serviceDto.Unit,
                     ChangedOn = serviceDto.ChangedOn,
@@ -88,7 +106,7 @@ namespace ResourceHub.Infrastructure.Repositories
                     ShortTxt = serviceDto.ShortTxt,
                     ValuationClass = serviceDto.ValuationClass
                 };
-                await _context.AddAsync(service);
+                await _context.Services.AddAsync(service);
             }
             catch (Exception ex) 
             { 
@@ -96,32 +114,14 @@ namespace ResourceHub.Infrastructure.Repositories
             }
         }
 
-        public async Task<bool> isActivityNoExists(string activityNumber)
+        public async Task<bool> IsActivityNoExists(string activityNumber , CancellationToken cancellationToken)
         {
-            return await _context.Services.AnyAsync(s=>s.ActivityNo == activityNumber);
+            return await _genericServicesReposetory.FindByAnyAsync(s => s.ActivityNo == activityNumber ,cancellationToken);
         }
 
-        private bool CheckNullability(ServiceDto serviceDto)
-        {
-            if (serviceDto.ActivityNo==null ||
-                serviceDto.Division == null ||
-                serviceDto.Unit == null ||
-                serviceDto.ServiceCat == null ||
-                serviceDto.ChangedBy == null ||
-                serviceDto.CreatedBy == null ||
-                serviceDto.ShortTxt == null ||
-                serviceDto.LongTxt == null ||
-                serviceDto.PrimaryLang == null ||
-                serviceDto.ValuationClass == null
-                )
-            {
-                return false;
-            }
-            else { return true; }
-        }
         private IQueryable<Service> ApplyFilter(
             IQueryable<Service> query,
-            SearchFilterType searchFilter)
+            SearchFilter searchFilter)
         {
             if (searchFilter.lastCursorId.HasValue)
             {
@@ -154,6 +154,7 @@ namespace ResourceHub.Infrastructure.Repositories
             }
             return query;
         }
+
         
     }
 }
