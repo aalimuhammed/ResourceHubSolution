@@ -2,9 +2,9 @@
 {
     public class JwtSettings
     {
-        public string issuer { get; set; } = null!;
-        public string audience { get; set; } = null!;
-        public string expirationInMinutes { get; set; } = null!;
-        public string secretKey { get; set; } = null!;
+        public string Issuer { get; set; } = null!;
+        public string Audience { get; set; } = null!;
+        public string ExpirationInMinutes { get; set; } = null!;
+        public string SecretKey { get; set; } = null!;
     }
 }

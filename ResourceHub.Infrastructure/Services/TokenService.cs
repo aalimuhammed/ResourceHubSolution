@@ -24,14 +24,14 @@ namespace ResourceHub.Infrastructure.Services
             {
                 new Claim(ClaimTypes.Name, user.UserName),
             };
-            var key = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(_jwtsettings.secretKey));
+            var key = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(_jwtsettings.SecretKey));
             
             var credentials= new SigningCredentials(key, SecurityAlgorithms.HmacSha256);
 
             var token= new JwtSecurityToken(
                 claims: claims,
-                issuer: _jwtsettings.issuer,
-                audience: _jwtsettings.audience,
+                issuer: _jwtsettings.Issuer,
+                audience: _jwtsettings.Audience,
                 expires: DateTime.Now.AddMinutes(60),
                 signingCredentials: credentials
             );
