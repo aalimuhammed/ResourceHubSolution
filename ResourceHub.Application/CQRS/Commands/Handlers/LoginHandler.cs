@@ -16,8 +16,6 @@ namespace ResourceHub.Application.CQRS.Commands.Handlers
         }
         public async Task<LoginResponseDto> HandlerAsync(LoginCommand request, CancellationToken cancellationToken = default)
         {
-            try
-            {
                 var user = await _userRepository.LoginAsync(request.LoginDto, cancellationToken);
                 var token = _jwtTokenJenerator.GenerateToken(user);
 
@@ -26,19 +24,6 @@ namespace ResourceHub.Application.CQRS.Commands.Handlers
                     Token = token,
                     userName = user.FullName
                 };
-            }
-            catch (KeyNotFoundException ex) 
-            {
-                throw new KeyNotFoundException($"{ex.Message}");
-            } 
-            catch (UnauthorizedAccessException ex)
-            {
-                throw new UnauthorizedAccessException($"{ex.Message}");
-            }
-            catch (Exception ex)
-            {
-                throw new Exception($"An error occurred while processing the login request :{ex.Message}",ex);
-            }
         }
     }
 }

@@ -1,3 +1,5 @@
+using Microsoft.AspNetCore.Diagnostics;
+using ResourceHub.API.Middlewares;
 using ResourceHub.Application.Dtos;
 using ResourceHub.Application.Extenions;
 using ResourceHub.Infrastructure.Contexts;
@@ -23,17 +25,10 @@ if (app.Environment.IsDevelopment())
     app.UseSwaggerUI();
 }
 
-try
+using (var scope = app.Services.CreateScope())
 {
-    using (var scope = app.Services.CreateScope())
-    {
-        var context = scope.ServiceProvider.GetRequiredService<ResourceHubDbContext>();
-        await SeedData.InitializeData(context);
-    }
-}
-catch (Exception ex)
-{
-    throw new Exception("An error occurred while seeding the database.", ex);
+    var context = scope.ServiceProvider.GetRequiredService<ResourceHubDbContext>();
+    await SeedData.InitializeData(context);
 }
 
 app.UseHttpsRedirection();
@@ -44,4 +39,5 @@ app.UseAuthorization();
 
 app.MapControllers();
 
-app.Run();
+app.UseMiddleware<GlobalException>();
+await app.RunAsync();

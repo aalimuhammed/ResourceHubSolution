@@ -33,24 +33,11 @@ namespace ResourceHub.Application.CQRS.Commands.Handlers
             {
                 throw new ValidationException(validationResult.Errors.First().ErrorMessage);
             }
-            try
-            {
+
                 await _userRepository.AddNewUserAsync(request.UserDto, cancellationToken);
 
                 await _unitOfWork.SaveChangesAsync(cancellationToken);
-            }
-            catch (ArgumentException ex)
-            {
-                throw new ArgumentException($"{ex.Message}");
-            }
-            catch (DuplicateNameException ex)
-            {
-                throw new DuplicateNameException($"{ex.Message}");
-            }
-            catch (Exception ex)
-            {
-                throw new Exception($"An error occurred while inserting the new User: " , ex.InnerException);
-            }
+
         }
     }
 }
