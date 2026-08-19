@@ -1,11 +1,10 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Text;
-
-namespace ResourceHub.Application.Interfaces
+﻿namespace ResourceHub.Application.Interfaces
 {
     public interface IUnitOfWork
     {
         Task<int> SaveChangesAsync(CancellationToken cancellationToken);
+        Task BeginTransactionAsync(CancellationToken cancellationToken);
+        Task CommitTransactionAsync(CancellationToken cancellationToken);
+        Task RollBackTransactionAsync(CancellationToken cancellationToken);
     }
 }

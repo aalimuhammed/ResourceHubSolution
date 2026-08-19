@@ -31,6 +31,8 @@ using (var scope = app.Services.CreateScope())
     await SeedData.InitializeData(context);
 }
 
+app.UseMiddleware<GlobalException>();
+
 app.UseHttpsRedirection();
 
 app.UseAuthentication(); 
@@ -39,5 +41,4 @@ app.UseAuthorization();
 
 app.MapControllers();
 
-app.UseMiddleware<GlobalException>();
 await app.RunAsync();
