@@ -6,7 +6,6 @@ namespace ResourceHub.API.Middlewares
     public class GlobalException
     {
         private readonly RequestDelegate _next;
-
         public GlobalException(RequestDelegate next)
         {
             _next = next;
@@ -26,35 +25,20 @@ namespace ResourceHub.API.Middlewares
         private async Task HandleExceptionAsync(HttpContext context , Exception exception)
         {
             var response = context.Response.ContentType = "application/json";
-
-            if(exception is KeyNotFoundException)
+            context.Response.StatusCode = exception switch
             {
-                context.Response.StatusCode = 404;
-            }
-            else if (exception is UnauthorizedAccessException)
-            {
-                context.Response.StatusCode = 401;
-            }
-            else if (exception is ArgumentException)
-            {
-                context.Response.StatusCode = 400;
-            }
-            else if (exception is DuplicateNameException)
-            {
-                context.Response.StatusCode = 409;
-            }
-            else
-            {
-                context.Response.StatusCode = 500;
-            }
+                KeyNotFoundException => 404,
+                UnauthorizedAccessException => 401,
+                ArgumentException => 400,
+                DuplicateNameException => 409,
+                _ => 500
+            };
 
             await context.Response.WriteAsJsonAsync(new ProblemDetails 
             { 
                 Status = context.Response.StatusCode, 
-                Detail = exception.Message }
-            );
-            
+                Detail = exception.Message 
+            });
         }
     }
-
 }

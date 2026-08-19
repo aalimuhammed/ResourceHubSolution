@@ -25,11 +25,11 @@ namespace ResourceHub.Application.CQRS.Commands.Handlers
         }
         public async Task HandlerAsync(InsertNewServiceCommand request, CancellationToken cancellationToken = default)
         { 
-            var vaildationResult = await _validator.ValidateAsync(request.ServiceDto, cancellationToken);
+            var validationResult = await _validator.ValidateAsync(request.ServiceDto, cancellationToken);
 
-            if (!vaildationResult.IsValid)
+            if (!validationResult.IsValid)
             {
-                throw new ValidationException(vaildationResult.Errors.First().ErrorMessage);
+                throw new ValidationException(validationResult.Errors.First().ErrorMessage);
             }
 
             bool isActivityNoFound = await _serviceRepository.IsActivityNoExists(request.ServiceDto.ActivityNo);
@@ -38,15 +38,9 @@ namespace ResourceHub.Application.CQRS.Commands.Handlers
             {
                 throw new DuplicateNameException($"Service with ActivityNo '{request.ServiceDto.ActivityNo}' already exists.");
             }
+            await _serviceRepository.InsertNewService(request.ServiceDto, cancellationToken);
 
-                if (request is null)
-                {
-                    throw new Exception("The Request is Empty");
-                }
-
-                await _serviceRepository.InsertNewService(request.ServiceDto, cancellationToken);
-
-                await _unitOfWork.SaveChangesAsync(cancellationToken);
+            await _unitOfWork.SaveChangesAsync(cancellationToken);
 
         }
     }

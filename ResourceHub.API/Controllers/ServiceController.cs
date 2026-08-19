@@ -11,7 +11,6 @@ using ResourceHub.Infrastructure.Repositories;
 
 namespace ResourceHub.API.Controllers
 {
-    [Authorize]
     [Route("api/[controller]")]
     [ApiController]
     public class ServiceController : ControllerBase
