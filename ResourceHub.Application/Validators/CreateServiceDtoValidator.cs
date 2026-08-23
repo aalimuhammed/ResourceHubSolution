@@ -1,12 +1,9 @@
 ﻿using FluentValidation;
 using ResourceHub.Application.Dtos;
-using System;
-using System.Collections.Generic;
-using System.Text;
 
 namespace ResourceHub.Application.Validators
 {
-    public class CreateServiceDtoValidator:AbstractValidator<ServiceDto>
+    public class CreateServiceDtoValidator : AbstractValidator<ServiceDto>
     {
         public CreateServiceDtoValidator() 
         {

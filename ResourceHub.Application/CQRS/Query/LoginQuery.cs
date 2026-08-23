@@ -3,6 +3,5 @@ using ResourceHub.Application.Dtos;
 
 namespace ResourceHub.Application.CQRS.Query
 {
-    public record GetServiceWithActivityNumberQuery(string activityNumber) 
-        : IQueryRequest<ServiceDto>;
+    public record LoginQuery(LoginDto LoginDto) : IQueryRequest<LoginResponseDto>;
 }

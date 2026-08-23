@@ -1,10 +1,4 @@
-﻿using ResourceHub.Application.Interfaces;
-using ResourceHub.Domain.Entities;
-using System;
-using System.Collections.Generic;
-using System.Text;
-
-namespace ResourceHub.Application.Dtos
+﻿namespace ResourceHub.Application.Dtos
 {
     public class LoginResponseDto
     {

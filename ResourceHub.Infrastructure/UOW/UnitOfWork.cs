@@ -1,7 +1,6 @@
 ﻿using Microsoft.EntityFrameworkCore.Storage;
 using ResourceHub.Application.Interfaces;
 using ResourceHub.Infrastructure.Contexts;
-using System.Data;
 
 namespace ResourceHub.Infrastructure.UOW
 {

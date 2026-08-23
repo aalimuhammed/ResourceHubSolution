@@ -12,12 +12,10 @@ namespace ResourceHub.Application.CQRS.Commands.Handlers
         private readonly IServiceRepository _serviceRepository;
         private readonly IUnitOfWork _unitOfWork;
         private readonly IValidator<ServiceDto> _validator;
-
         public InsertNewServiceHandler(
             IServiceRepository serviceRepository,
             IUnitOfWork unitOfWork,
-            IValidator<ServiceDto> validator
-            )
+            IValidator<ServiceDto> validator)
         {
             _serviceRepository = serviceRepository;
             _unitOfWork = unitOfWork;
@@ -32,12 +30,13 @@ namespace ResourceHub.Application.CQRS.Commands.Handlers
                 throw new ValidationException(validationResult.Errors.First().ErrorMessage);
             }
 
-            bool isActivityNoFound = await _serviceRepository.IsActivityNoExists(request.ServiceDto.ActivityNo);
+            bool isActivityNoFound = await _serviceRepository.IsActivityNoExists(request.ServiceDto.ActivityNo , cancellationToken);
 
             if (isActivityNoFound)
             {
                 throw new DuplicateNameException($"Service with ActivityNo '{request.ServiceDto.ActivityNo}' already exists.");
             }
+
             await _serviceRepository.InsertNewService(request.ServiceDto, cancellationToken);
 
             await _unitOfWork.SaveChangesAsync(cancellationToken);

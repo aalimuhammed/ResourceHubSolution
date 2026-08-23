@@ -1,4 +1,5 @@
 ﻿using Microsoft.AspNetCore.Mvc;
+using ResourceHub.Application.Exceptions;
 using System.Data;
 
 namespace ResourceHub.API.Middlewares
@@ -28,7 +29,7 @@ namespace ResourceHub.API.Middlewares
             context.Response.StatusCode = exception switch
             {
                 KeyNotFoundException => 404,
-                UnauthorizedAccessException => 401,
+                UnAuthenticatedException => 401,
                 ArgumentException => 400,
                 DuplicateNameException => 409,
                 _ => 500

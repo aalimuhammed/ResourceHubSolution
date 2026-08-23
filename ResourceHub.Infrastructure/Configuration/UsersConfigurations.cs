@@ -1,10 +1,6 @@
 ﻿using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Metadata.Builders;
-using Microsoft.Extensions.Configuration;
 using ResourceHub.Domain.Entities;
-using System;
-using System.Collections.Generic;
-using System.Text;
 
 namespace ResourceHub.Infrastructure.Configuration
 {

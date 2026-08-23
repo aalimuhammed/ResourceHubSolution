@@ -9,15 +9,13 @@ using System.Text;
 
 namespace ResourceHub.Infrastructure.Services
 {
-    internal class TokenService: IJwtTokenGenerator
+    internal class TokenService : IJwtTokenGenerator
     {
         private readonly JwtSettings _jwtsettings;
-
         public TokenService(IOptions<JwtSettings> jwtsettings)
         {
             _jwtsettings = jwtsettings.Value;
         }
-
         public string GenerateToken(Users user)
         {
             var claims = new[]

@@ -1,8 +1,8 @@
 ﻿using Microsoft.AspNetCore.Mvc;
 using ResourceHub.Application.Common.Mediator;
 using ResourceHub.Application.CQRS.Commands;
+using ResourceHub.Application.CQRS.Query;
 using ResourceHub.Application.Dtos;
-using System.Data;
 
 namespace ResourceHub.API.Controllers
 {
@@ -11,7 +11,6 @@ namespace ResourceHub.API.Controllers
     public class AuthorizationController : ControllerBase
     {
         private readonly IMediator _mediator;
-
         public AuthorizationController(IMediator mediator)
         {
             _mediator = mediator;
@@ -23,8 +22,8 @@ namespace ResourceHub.API.Controllers
         CancellationToken cancellationToken)
         {
 
-                var loginResponse = await _mediator.SendCommandAsync<LoginCommand, LoginResponseDto>(
-                    new LoginCommand(loginDto),
+                var loginResponse = await _mediator.SendQueryAsync<LoginQuery, LoginResponseDto>(
+                    new LoginQuery(loginDto),
                     cancellationToken);
 
                 return Ok(loginResponse);
@@ -35,8 +34,8 @@ namespace ResourceHub.API.Controllers
         public async Task<ActionResult> AddNewUser([FromBody] CreateUserDto userDto, CancellationToken cancellationToken)
         {
 
-                await _mediator.SendCommandAsync<AddNewUserCommand>(
-                     new AddNewUserCommand(userDto), cancellationToken
+                await _mediator.SendCommandAsync<InsertNewUserCommand>(
+                     new InsertNewUserCommand(userDto), cancellationToken
                      );
                 return Ok(new
                 {

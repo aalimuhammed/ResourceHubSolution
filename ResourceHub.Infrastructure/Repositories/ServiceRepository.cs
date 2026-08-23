@@ -10,16 +10,14 @@ namespace ResourceHub.Infrastructure.Repositories
     {
         private readonly ResourceHubDbContext _context;
         private readonly IGenericRepository<Service> _genericServicesReposetory;
-
         public ServiceRepository(
             ResourceHubDbContext context ,
-            IGenericRepository<Service> genericServicesReposetory
-            )
+            IGenericRepository<Service> genericServicesReposetory)
         {
             _context = context;
             _genericServicesReposetory = genericServicesReposetory;
         }
-        public async Task<PaginatedServiceResultDto<ServiceResponseDto>> GetPagintedServices(
+        public async Task<PaginatedResultDto<ServiceResponseDto>> GetPagintedServices(
             SearchFilter searchFilter,
             CancellationToken cancellationToken = default)
         {
@@ -61,11 +59,13 @@ namespace ResourceHub.Infrastructure.Repositories
                
             }).ToListAsync(cancellationToken); 
 
-            var result = new PaginatedServiceResultDto<ServiceResponseDto>
+            var result = new PaginatedResultDto<ServiceResponseDto>
             {
-                ServicesDto = items.Take(pagesize),
+                Items = items.Take(pagesize),
 
-                Next = items.Count > pagesize ? items.Last().CursorId :null
+                Next = items.Count > pagesize ? items.Last().CursorId :null,
+
+                TotalCount = await query.CountAsync(cancellationToken)
             };
 
             return result;
@@ -73,20 +73,11 @@ namespace ResourceHub.Infrastructure.Repositories
         
         public async Task InsertNewService(ServiceDto serviceDto, CancellationToken cancellationToken)
         {
-            try
-            {
                 int? lastCursorId = 0 ;
-
-                var x = await _genericServicesReposetory.FindByAnyAsync(cancellationToken: cancellationToken);
 
                 if (!await _genericServicesReposetory.FindByAnyAsync(cancellationToken:cancellationToken))
                 {
                    lastCursorId = await _genericServicesReposetory.FindMaxAsync(s => s.CursorId, cancellationToken);
-                }
-
-                if (lastCursorId == null)
-                {
-                    lastCursorId = 0;
                 }
 
                 Service service = new Service
@@ -107,12 +98,8 @@ namespace ResourceHub.Infrastructure.Repositories
                     ShortTxt = serviceDto.ShortTxt,
                     ValuationClass = serviceDto.ValuationClass
                 };
+
                 await _context.Services.AddAsync(service);
-            }
-            catch (Exception ex) 
-            { 
-                throw new Exception($"Error inserting new service: {ex.Message}", ex);
-            }
         }
 
         public async Task<bool> IsActivityNoExists(string activityNumber , CancellationToken cancellationToken)
@@ -155,7 +142,6 @@ namespace ResourceHub.Infrastructure.Repositories
             }
             return query;
         }
-
         
     }
 }
