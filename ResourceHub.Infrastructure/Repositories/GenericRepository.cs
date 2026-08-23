@@ -1,7 +1,6 @@
 ﻿using Microsoft.EntityFrameworkCore;
 using ResourceHub.Application.Interfaces;
 using ResourceHub.Domain.Base;
-using ResourceHub.Domain.Entities;
 using ResourceHub.Infrastructure.Contexts;
 using System.Linq.Expressions;
 
@@ -32,10 +31,8 @@ namespace ResourceHub.Infrastructure.Repositories
             {
                 return await _set.AnyAsync(filterByCondition,cancellationToken);
             }
-
             return await _set.AnyAsync(cancellationToken);
         }
-
         public async Task<int?> FindMaxAsync(
             Expression<Func<T,int?>> filterByCondition ,
             CancellationToken cancellationToken = default)

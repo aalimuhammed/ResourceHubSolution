@@ -10,16 +10,14 @@ namespace ResourceHub.Infrastructure.Repositories
     {
         private readonly ResourceHubDbContext _context;
         private readonly IGenericRepository<Service> _genericServicesReposetory;
-
         public ServiceRepository(
             ResourceHubDbContext context ,
-            IGenericRepository<Service> genericServicesReposetory
-            )
+            IGenericRepository<Service> genericServicesReposetory)
         {
             _context = context;
             _genericServicesReposetory = genericServicesReposetory;
         }
-        public async Task<PaginatedServiceResultDto<ServiceResponseDto>> GetPagintedServices(
+        public async Task<PaginatedResultDto<ServiceResponseDto>> GetPagintedServices(
             SearchFilter searchFilter,
             CancellationToken cancellationToken = default)
         {
@@ -61,65 +59,52 @@ namespace ResourceHub.Infrastructure.Repositories
                
             }).ToListAsync(cancellationToken); 
 
-            var result = new PaginatedServiceResultDto<ServiceResponseDto>
+            var result = new PaginatedResultDto<ServiceResponseDto>
             {
-                ServicesDto = items.Take(pagesize),
+                Items = items.Take(pagesize),
 
-                Next = items.Count > pagesize ? items.Last().CursorId :null
+                Next = items.Count > pagesize ? items.Last().CursorId :null,
+
+                TotalCount = await query.CountAsync(cancellationToken)
             };
 
             return result;
         }
-        
-        public async Task InsertNewService(ServiceDto serviceDto, CancellationToken cancellationToken)
+        public async Task InsertNewService(
+            ServiceDto serviceDto, 
+            CancellationToken cancellationToken = default)
         {
-            try
-            {
-                int? lastCursorId = 0 ;
-
-                var x = await _genericServicesReposetory.FindByAnyAsync(cancellationToken: cancellationToken);
-
-                if (!await _genericServicesReposetory.FindByAnyAsync(cancellationToken:cancellationToken))
-                {
-                   lastCursorId = await _genericServicesReposetory.FindMaxAsync(s => s.CursorId, cancellationToken);
-                }
-
-                if (lastCursorId == null)
-                {
-                    lastCursorId = 0;
-                }
+               var lastCursorId = await _genericServicesReposetory.FindMaxAsync(
+                    s => s.CursorId, 
+                    cancellationToken) ?? 0;
 
                 Service service = new Service
                 {
-                    CursorId = lastCursorId + 1,
-                    DeletionInd = serviceDto.DeletionInd,
-                    Unit = serviceDto.Unit,
-                    ChangedOn = serviceDto.ChangedOn,
-                    PrimaryLang = serviceDto.PrimaryLang,
-                    ActivityNo = serviceDto.ActivityNo,
-                    ChangedBy = serviceDto.ChangedBy,
-                    CreatedBy = serviceDto.CreatedBy,
-                    CreatedOn = serviceDto.CreatedOn,
-                    Division = serviceDto.Division,
-                    LongTxt = serviceDto.LongTxt,
-                    MaterialGroup = serviceDto.MaterialGroup,
-                    ServiceCat = serviceDto.ServiceCat,
-                    ShortTxt = serviceDto.ShortTxt,
-                    ValuationClass = serviceDto.ValuationClass
-                };
-                await _context.Services.AddAsync(service);
-            }
-            catch (Exception ex) 
-            { 
-                throw new Exception($"Error inserting new service: {ex.Message}", ex);
-            }
-        }
+                        CursorId = lastCursorId + 1,
+                        DeletionInd = serviceDto.DeletionInd,
+                        Unit = serviceDto.Unit,
+                        ChangedOn = serviceDto.ChangedOn,
+                        PrimaryLang = serviceDto.PrimaryLang,
+                        ActivityNo = serviceDto.ActivityNo,
+                        ChangedBy = serviceDto.ChangedBy,
+                        CreatedBy = serviceDto.CreatedBy,
+                        CreatedOn = serviceDto.CreatedOn,
+                        Division = serviceDto.Division,
+                        LongTxt = serviceDto.LongTxt,
+                        MaterialGroup = serviceDto.MaterialGroup,
+                        ServiceCat = serviceDto.ServiceCat,
+                        ShortTxt = serviceDto.ShortTxt,
+                        ValuationClass = serviceDto.ValuationClass
+                 };
 
+                await _context.Services.AddAsync(service);
+        }
         public async Task<bool> IsActivityNoExists(string activityNumber , CancellationToken cancellationToken)
         {
-            return await _genericServicesReposetory.FindByAnyAsync(s => s.ActivityNo == activityNumber ,cancellationToken);
+            return await _genericServicesReposetory.FindByAnyAsync(
+                s => s.ActivityNo == activityNumber ,
+                cancellationToken);
         }
-
         private IQueryable<Service> ApplyFilter(
             IQueryable<Service> query,
             SearchFilter searchFilter)
@@ -155,7 +140,6 @@ namespace ResourceHub.Infrastructure.Repositories
             }
             return query;
         }
-
         
     }
 }

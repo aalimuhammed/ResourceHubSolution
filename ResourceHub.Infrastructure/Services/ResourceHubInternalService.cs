@@ -45,7 +45,7 @@ namespace ResourceHub.Infrastructure.Services
                 }
 
 
-                foreach (var dto in result.Services)
+                foreach (var dto in result.Items)
                 {
                     // Skip duplicates already in DB or previous pages
                     // we create Hashset that contains all activity numbers so it holds only unique activity numbers 

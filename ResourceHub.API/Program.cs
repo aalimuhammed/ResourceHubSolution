@@ -1,6 +1,4 @@
-using Microsoft.AspNetCore.Diagnostics;
 using ResourceHub.API.Middlewares;
-using ResourceHub.Application.Dtos;
 using ResourceHub.Application.Extenions;
 using ResourceHub.Infrastructure.Contexts;
 using ResourceHub.Infrastructure.Extenions;
@@ -19,6 +17,8 @@ builder.Services.AddSwaggerGen();
 
 var app = builder.Build();
 
+app.UseMiddleware<GlobalException>();
+
 if (app.Environment.IsDevelopment())
 {
     app.UseSwagger();
@@ -31,7 +31,6 @@ using (var scope = app.Services.CreateScope())
     await SeedData.InitializeData(context);
 }
 
-app.UseMiddleware<GlobalException>();
 
 app.UseHttpsRedirection();
 

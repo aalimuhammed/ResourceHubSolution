@@ -21,9 +21,9 @@ namespace ResourceHub.Application.CQRS.Query.Handlers
                 s => s.ActivityNo == request.activityNumber,
                 cancellationToken);
 
-            if(service == null)
+            if (service == null)
             {
-                throw new Exception($"Service with ActivityNo '{request.activityNumber}' not found.");
+                throw new KeyNotFoundException($"Service with ActivityNo '{request.activityNumber}' not found.");
             }
 
             var serviceDto = new ServiceDto()

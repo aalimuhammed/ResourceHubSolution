@@ -1,19 +1,18 @@
-﻿using Microsoft.Extensions.DependencyInjection;
+﻿using FluentValidation;
+using Microsoft.Extensions.DependencyInjection;
 using ResourceHub.Application.Common.Mediator;
-using ResourceHub.Application.Validators;
 using System.Reflection;
-using FluentValidation;
 namespace ResourceHub.Application.Extenions
 {
     public static class ApplicationServices
     {
         public static IServiceCollection AddApplicationService(this IServiceCollection services)
         {
-            services.AddMediator(Assembly.GetExecutingAssembly());
+            var assembly = Assembly.GetExecutingAssembly();
 
-            services.AddValidatorsFromAssemblyContaining<CreateServiceDtoValidator>();
+            services.AddMediator(assembly);
 
-            services.AddValidatorsFromAssemblyContaining<CreateUserDtoValidtaor>();
+            services.AddValidatorsFromAssembly(assembly);
 
             return services;
         }
