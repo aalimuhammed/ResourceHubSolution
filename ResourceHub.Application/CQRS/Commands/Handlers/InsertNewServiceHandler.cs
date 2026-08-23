@@ -2,6 +2,7 @@
 using ResourceHub.Application.Common.Mediator;
 using ResourceHub.Application.Dtos;
 using ResourceHub.Application.Interfaces;
+using System.Data;
 
 namespace ResourceHub.Application.CQRS.Commands.Handlers
 {
@@ -24,35 +25,23 @@ namespace ResourceHub.Application.CQRS.Commands.Handlers
         }
         public async Task HandlerAsync(InsertNewServiceCommand request, CancellationToken cancellationToken = default)
         { 
-            var vaildationResult = await _validator.ValidateAsync(request.ServiceDto, cancellationToken);
+            var validationResult = await _validator.ValidateAsync(request.ServiceDto, cancellationToken);
 
-            if (!vaildationResult.IsValid)
+            if (!validationResult.IsValid)
             {
-                throw new ValidationException(vaildationResult.Errors.First().ErrorMessage);
+                throw new ValidationException(validationResult.Errors.First().ErrorMessage);
             }
 
             bool isActivityNoFound = await _serviceRepository.IsActivityNoExists(request.ServiceDto.ActivityNo);
 
             if (isActivityNoFound)
             {
-                throw new Exception($"Service with ActivityNo '{request.ServiceDto.ActivityNo}' already exists.");
+                throw new DuplicateNameException($"Service with ActivityNo '{request.ServiceDto.ActivityNo}' already exists.");
             }
+            await _serviceRepository.InsertNewService(request.ServiceDto, cancellationToken);
 
-            try
-            {
-                if (request is null)
-                {
-                    throw new Exception("The Request is Empty");
-                }
+            await _unitOfWork.SaveChangesAsync(cancellationToken);
 
-                await _serviceRepository.InsertNewService(request.ServiceDto, cancellationToken);
-
-                await _unitOfWork.SaveChangesAsync(cancellationToken);
-            }
-            catch (Exception ex) {
-                throw new Exception($"An error occurred while inserting the new service: {ex.Message}");
-            }
-            
         }
     }
 }

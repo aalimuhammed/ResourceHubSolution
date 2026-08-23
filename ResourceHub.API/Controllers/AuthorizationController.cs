@@ -22,32 +22,19 @@ namespace ResourceHub.API.Controllers
         [FromBody] LoginDto loginDto,
         CancellationToken cancellationToken)
         {
-            try
-            {
+
                 var loginResponse = await _mediator.SendCommandAsync<LoginCommand, LoginResponseDto>(
                     new LoginCommand(loginDto),
                     cancellationToken);
 
                 return Ok(loginResponse);
-            }
-            catch(KeyNotFoundException ex)
-            {
-                return NotFound(ex.Message);
-            }
-            catch(UnauthorizedAccessException ex)
-            {
-                return Unauthorized(ex.Message);
-            }
-            catch (Exception ex)
-            {
-                return Unauthorized(ex.Message);
-            }
+
+
         }
         [HttpPost("AddNewUser")]
         public async Task<ActionResult> AddNewUser([FromBody] CreateUserDto userDto, CancellationToken cancellationToken)
         {
-            try
-            {
+
                 await _mediator.SendCommandAsync<AddNewUserCommand>(
                      new AddNewUserCommand(userDto), cancellationToken
                      );
@@ -55,19 +42,7 @@ namespace ResourceHub.API.Controllers
                 {
                     Message = "User added successfully"
                 });
-            }
-            catch (ArgumentException ex)
-            {
-                return BadRequest(ex.Message);
-            }
-            catch (DuplicateNameException ex)
-            {
-                return Conflict(ex.Message);
-            }
-            catch (Exception ex)
-            {
-                return StatusCode(500, ex.Message);
-            }
+
         }
     }
 }
