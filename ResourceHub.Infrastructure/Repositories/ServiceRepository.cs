@@ -25,14 +25,15 @@ namespace ResourceHub.Infrastructure.Repositories
         {
             IQueryable<Service> query = _context.Services;
 
+            // current items count
             var pagesize = searchFilter.PageSize;
 
             query = ApplyFilter(query, searchFilter);
 
             #region CursorPaginationExplaination
-            // pagesize = 3 
-            // items will take 4 items 
-            //to know if there are next items the condintion (items.count>pagesize) will decide
+            // pagesize = 100
+            // items will take 101 items 
+            // to know if there are next items the condintion (items.count>pagesize) will decide
             // we have to retuen the same size of pagesize so when we return we take pagesize not pagesize+1
             #endregion
 

@@ -23,10 +23,6 @@ namespace ResourceHub.Application.CQRS.Commands.Handlers
         }
         public async Task HandlerAsync(AddNewUserCommand request, CancellationToken cancellationToken = default)
         {
-            try
-            {
-                await _unitOfWork.BeginTransactionAsync(cancellationToken);
-
                 var validationResult = await _validator.ValidateAsync(request.UserDto, cancellationToken);
 
                 if (!validationResult.IsValid)
@@ -37,14 +33,6 @@ namespace ResourceHub.Application.CQRS.Commands.Handlers
                 await _userRepository.AddNewUserAsync(request.UserDto, cancellationToken);
 
                 await _unitOfWork.SaveChangesAsync(cancellationToken);
-
-                await _unitOfWork.CommitTransactionAsync(cancellationToken); 
-            }
-            catch
-            {
-                await _unitOfWork.RollBackTransactionAsync(cancellationToken);
-                throw;
-            }
 
         }
     }
