@@ -70,43 +70,41 @@ namespace ResourceHub.Infrastructure.Repositories
 
             return result;
         }
-        
-        public async Task InsertNewService(ServiceDto serviceDto, CancellationToken cancellationToken)
+        public async Task InsertNewService(
+            ServiceDto serviceDto, 
+            CancellationToken cancellationToken = default)
         {
-                int? lastCursorId = 0 ;
-
-                if (!await _genericServicesReposetory.FindByAnyAsync(cancellationToken:cancellationToken))
-                {
-                   lastCursorId = await _genericServicesReposetory.FindMaxAsync(s => s.CursorId, cancellationToken);
-                }
+               var lastCursorId = await _genericServicesReposetory.FindMaxAsync(
+                    s => s.CursorId, 
+                    cancellationToken) ?? 0;
 
                 Service service = new Service
                 {
-                    CursorId = lastCursorId + 1,
-                    DeletionInd = serviceDto.DeletionInd,
-                    Unit = serviceDto.Unit,
-                    ChangedOn = serviceDto.ChangedOn,
-                    PrimaryLang = serviceDto.PrimaryLang,
-                    ActivityNo = serviceDto.ActivityNo,
-                    ChangedBy = serviceDto.ChangedBy,
-                    CreatedBy = serviceDto.CreatedBy,
-                    CreatedOn = serviceDto.CreatedOn,
-                    Division = serviceDto.Division,
-                    LongTxt = serviceDto.LongTxt,
-                    MaterialGroup = serviceDto.MaterialGroup,
-                    ServiceCat = serviceDto.ServiceCat,
-                    ShortTxt = serviceDto.ShortTxt,
-                    ValuationClass = serviceDto.ValuationClass
-                };
+                        CursorId = lastCursorId + 1,
+                        DeletionInd = serviceDto.DeletionInd,
+                        Unit = serviceDto.Unit,
+                        ChangedOn = serviceDto.ChangedOn,
+                        PrimaryLang = serviceDto.PrimaryLang,
+                        ActivityNo = serviceDto.ActivityNo,
+                        ChangedBy = serviceDto.ChangedBy,
+                        CreatedBy = serviceDto.CreatedBy,
+                        CreatedOn = serviceDto.CreatedOn,
+                        Division = serviceDto.Division,
+                        LongTxt = serviceDto.LongTxt,
+                        MaterialGroup = serviceDto.MaterialGroup,
+                        ServiceCat = serviceDto.ServiceCat,
+                        ShortTxt = serviceDto.ShortTxt,
+                        ValuationClass = serviceDto.ValuationClass
+                 };
 
                 await _context.Services.AddAsync(service);
         }
-
         public async Task<bool> IsActivityNoExists(string activityNumber , CancellationToken cancellationToken)
         {
-            return await _genericServicesReposetory.FindByAnyAsync(s => s.ActivityNo == activityNumber ,cancellationToken);
+            return await _genericServicesReposetory.FindByAnyAsync(
+                s => s.ActivityNo == activityNumber ,
+                cancellationToken);
         }
-
         private IQueryable<Service> ApplyFilter(
             IQueryable<Service> query,
             SearchFilter searchFilter)
