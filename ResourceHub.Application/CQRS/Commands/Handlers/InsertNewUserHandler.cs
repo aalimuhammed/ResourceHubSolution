@@ -1,6 +1,7 @@
 ﻿using FluentValidation;
 using ResourceHub.Application.Common.Mediator;
 using ResourceHub.Application.Dtos;
+using ResourceHub.Application.Exceptions;
 using ResourceHub.Application.Interfaces;
 
 namespace ResourceHub.Application.CQRS.Commands.Handlers
@@ -26,7 +27,7 @@ namespace ResourceHub.Application.CQRS.Commands.Handlers
 
             if (!validationResult.IsValid)
             {
-                throw new ValidationException(validationResult.Errors.First().ErrorMessage);
+                throw new VaildateException(validationResult.Errors.First().ErrorMessage);
             }
 
             await _userRepository.InsertNewUserAsync(request.UserDto, cancellationToken);

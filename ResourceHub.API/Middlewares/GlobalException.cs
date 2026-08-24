@@ -28,10 +28,11 @@ namespace ResourceHub.API.Middlewares
             var response = context.Response.ContentType = "application/json";
             context.Response.StatusCode = exception switch
             {
-                KeyNotFoundException => 404,
+                NotFoundException => 404,
                 UnAuthenticatedException => 401,
                 ArgumentException => 400,
-                DuplicateNameException => 409,
+                DuplicateValueException => 409,
+                VaildateException=>422,
                 _ => 500
             };
 

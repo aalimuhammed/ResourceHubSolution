@@ -26,7 +26,7 @@ namespace ResourceHub.Infrastructure.Repositories
         {
             if(await _genericUserRepository.FindByAnyAsync(u => u.Email == userDto.Email))
             {
-                throw new DuplicateNameException("User already Exists");
+                throw new DuplicateValueException("User already Exists");
             }
 
             var user = new Users
@@ -46,7 +46,7 @@ namespace ResourceHub.Infrastructure.Repositories
 
             if (user is null)
             {
-                throw new KeyNotFoundException("User not found.");
+                throw new NotFoundException("User not found.");
             }
 
             bool verifyPassword = _passwordService.VerifyPassword(loginDto.password, user.Password);

@@ -1,6 +1,7 @@
 ﻿using FluentValidation;
 using ResourceHub.Application.Common.Mediator;
 using ResourceHub.Application.Dtos;
+using ResourceHub.Application.Exceptions;
 using ResourceHub.Application.Interfaces;
 using System.Data;
 
@@ -27,14 +28,14 @@ namespace ResourceHub.Application.CQRS.Commands.Handlers
 
             if (!validationResult.IsValid)
             {
-                throw new ValidationException(validationResult.Errors.First().ErrorMessage);
+                throw new VaildateException(validationResult.Errors.First().ErrorMessage);
             }
 
             bool isActivityNoFound = await _serviceRepository.IsActivityNoExists(request.ServiceDto.ActivityNo , cancellationToken);
 
             if (isActivityNoFound)
             {
-                throw new DuplicateNameException($"Service with ActivityNo '{request.ServiceDto.ActivityNo}' already exists.");
+                throw new DuplicateValueException($"Service with ActivityNo '{request.ServiceDto.ActivityNo}' already exists.");
             }
 
             await _serviceRepository.InsertNewService(request.ServiceDto, cancellationToken);
