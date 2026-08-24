@@ -1,5 +1,6 @@
 ﻿using ResourceHub.Application.Common.Mediator;
 using ResourceHub.Application.Dtos;
+using ResourceHub.Application.Exceptions;
 using ResourceHub.Application.Interfaces;
 using ResourceHub.Domain.Entities;
 
@@ -23,7 +24,7 @@ namespace ResourceHub.Application.CQRS.Query.Handlers
 
             if (service == null)
             {
-                throw new KeyNotFoundException($"Service with ActivityNo '{request.activityNumber}' not found.");
+                throw new NotFoundException($"Service with ActivityNo '{request.activityNumber}' not found.");
             }
 
             var serviceDto = new ServiceDto()
