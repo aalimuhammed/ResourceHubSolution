@@ -21,27 +21,23 @@ namespace ResourceHub.API.Controllers
         [FromBody] LoginDto loginDto,
         CancellationToken cancellationToken)
         {
+             var loginResponse = await _mediator.SendQueryAsync<LoginQuery, LoginResponseDto>(
+             new LoginQuery(loginDto),
+             cancellationToken);
 
-                var loginResponse = await _mediator.SendQueryAsync<LoginQuery, LoginResponseDto>(
-                    new LoginQuery(loginDto),
-                    cancellationToken);
-
-                return Ok(loginResponse);
-
-
+             return Ok(loginResponse);
         }
+
         [HttpPost("AddNewUser")]
         public async Task<ActionResult> AddNewUser([FromBody] CreateUserDto userDto, CancellationToken cancellationToken)
         {
+            await _mediator.SendCommandAsync<InsertNewUserCommand>(
+            new InsertNewUserCommand(userDto), cancellationToken);
 
-                await _mediator.SendCommandAsync<InsertNewUserCommand>(
-                     new InsertNewUserCommand(userDto), cancellationToken
-                     );
-                return Ok(new
-                {
-                    Message = "User added successfully"
-                });
-
+            return Ok(new
+            {
+                Message = "User added successfully"
+            });
         }
     }
 }
