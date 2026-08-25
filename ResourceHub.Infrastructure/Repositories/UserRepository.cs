@@ -28,7 +28,6 @@ namespace ResourceHub.Infrastructure.Repositories
             {
                 throw new DuplicateNameException("User already Exists");
             }
-
             var user = new Users
             {
                 FullName = userDto.FullName,
@@ -39,7 +38,6 @@ namespace ResourceHub.Infrastructure.Repositories
 
             await _resourceHubDbContext.Users.AddAsync(user);
         }
-
         public async Task<Users> LoginAsync(LoginDto loginDto, CancellationToken cancellationToken)
         {
             var user = await _genericUserRepository.GetByFirstOrDefault(u => u.Email == loginDto.email);
@@ -55,7 +53,6 @@ namespace ResourceHub.Infrastructure.Repositories
             {
                 throw new UnAuthenticatedException("Invalid Email Or Password.");
             }
-
             return user;
         }
     }

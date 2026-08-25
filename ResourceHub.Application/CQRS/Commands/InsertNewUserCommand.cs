@@ -3,5 +3,5 @@ using ResourceHub.Application.Dtos;
 
 namespace ResourceHub.Application.CQRS.Commands
 {
-    public record InsertNewUserCommand(CreateUserDto UserDto) : ICommandRequest;
+   public record InsertNewUserCommand(CreateUserDto UserDto) : ICommandRequest;
 }

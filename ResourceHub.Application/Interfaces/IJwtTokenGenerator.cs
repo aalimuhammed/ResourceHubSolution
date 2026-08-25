@@ -4,6 +4,6 @@ namespace ResourceHub.Application.Interfaces
 {
     public interface IJwtTokenGenerator
     {
-         string GenerateToken(Users user);
+        string GenerateToken(Users user);
     }
 }

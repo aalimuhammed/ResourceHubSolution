@@ -15,8 +15,7 @@ namespace ResourceHub.Application.Extenions
             services.AddValidatorsFromAssembly(assembly);
 
             return services;
-        }
-        
+        } 
         private static IServiceCollection AddMediator(this IServiceCollection services, Assembly assembly)
         {
             services.AddScoped<IMediator, Mediator>();

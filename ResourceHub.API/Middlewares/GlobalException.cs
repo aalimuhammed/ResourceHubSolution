@@ -11,7 +11,7 @@ namespace ResourceHub.API.Middlewares
         {
             _next = next;
         }
-        public async Task InvokeAsync(HttpContext context) 
+        public async Task InvokeAsync(HttpContext context)
         {
             try
             {
@@ -22,7 +22,6 @@ namespace ResourceHub.API.Middlewares
                 await HandleExceptionAsync(context, ex);
             }
         }
-
         private async Task HandleExceptionAsync(HttpContext context , Exception exception)
         {
             var response = context.Response.ContentType = "application/json";
