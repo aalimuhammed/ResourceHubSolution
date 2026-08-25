@@ -1,7 +1,5 @@
 ﻿using Microsoft.AspNetCore.Mvc;
 using ResourceHub.Application.Exceptions;
-using System.Data;
-
 namespace ResourceHub.API.Middlewares
 {
     public class GlobalException
@@ -22,7 +20,6 @@ namespace ResourceHub.API.Middlewares
                 await HandleExceptionAsync(context, ex);
             }
         }
-
         private async Task HandleExceptionAsync(HttpContext context , Exception exception)
         {
             var response = context.Response.ContentType = "application/json";

@@ -23,7 +23,10 @@ namespace ResourceHub.Infrastructure.Services
             var byteArray = System.Text.Encoding.ASCII.GetBytes($"{_settings.Value.UserName}:{_settings.Value.Password}");
             _httpClient.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Basic", Convert.ToBase64String(byteArray));
         }
-        public async Task<PaginatedResultDto<ServiceDto>> GetServicePageAsync(int pageNumber, int pageSize, CancellationToken cancellationToken)
+        public async Task<PaginatedResultDto<ServiceDto>> GetServicePageAsync(
+            int pageNumber, 
+            int pageSize,
+            CancellationToken cancellationToken)
         {
             var offset = (pageNumber - 1) * pageSize;
             var top = pageSize;

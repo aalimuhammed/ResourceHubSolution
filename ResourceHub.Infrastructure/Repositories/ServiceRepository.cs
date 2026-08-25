@@ -95,7 +95,7 @@ namespace ResourceHub.Infrastructure.Repositories
                         ServiceCat = serviceDto.ServiceCat,
                         ShortTxt = serviceDto.ShortTxt,
                         ValuationClass = serviceDto.ValuationClass
-                 };
+                };
 
                 await _context.Services.AddAsync(service);
         }
@@ -113,7 +113,6 @@ namespace ResourceHub.Infrastructure.Repositories
             {
                 query = query.Where(s => s.CursorId > searchFilter.lastCursorId);
             }
-
             if (!string.IsNullOrWhiteSpace(searchFilter.ActivityNo))
             {
                 query = query.Where(s => s.ActivityNo == searchFilter.ActivityNo);
@@ -126,20 +125,18 @@ namespace ResourceHub.Infrastructure.Repositories
             {
                 query = query.Where(s => s.ServiceCat == searchFilter.ServiceCat);
             }
-            if (!string.IsNullOrWhiteSpace(searchFilter.ShortTxt))
+            if (!string.IsNullOrWhiteSpace(searchFilter.Description))
             {
-                query = query.Where(s => s.ShortTxt.Contains(searchFilter.ShortTxt));
+                query = query.Where(
+                    s => s.LongTxt.Contains(searchFilter.Description) ||
+                    s.ShortTxt.Contains(searchFilter.Description));
             }
-            if (!string.IsNullOrWhiteSpace(searchFilter.LongTxt))
+            if(searchFilter.DeletionInd.HasValue)
             {
-                query = query.Where(s => s.LongTxt.Contains(searchFilter.LongTxt));
+                query = query.Where(s=>s.DeletionInd== searchFilter.DeletionInd);
             }
-            if (searchFilter.CreatedOn is not null)
-            {
-                query = query.Where(s => s.CreatedOn == searchFilter.CreatedOn);
-            }
+
             return query;
         }
-        
     }
 }

@@ -21,7 +21,6 @@ namespace ResourceHub.Infrastructure.Repositories
             _passwordService = passwordService;
             _genericUserRepository = genericUserRepository;
         }
-
         public async Task InsertNewUserAsync(CreateUserDto userDto, CancellationToken cancellationToken)
         {
             if(await _genericUserRepository.FindByAnyAsync(u => u.Email == userDto.Email))
@@ -39,7 +38,6 @@ namespace ResourceHub.Infrastructure.Repositories
 
             await _resourceHubDbContext.Users.AddAsync(user);
         }
-
         public async Task<Users> LoginAsync(LoginDto loginDto, CancellationToken cancellationToken)
         {
             var user = await _genericUserRepository.GetByFirstOrDefault(u => u.Email == loginDto.email);

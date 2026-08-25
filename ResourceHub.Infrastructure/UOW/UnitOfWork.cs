@@ -22,7 +22,6 @@ namespace ResourceHub.Infrastructure.UOW
 
             transaction = await _context.Database.BeginTransactionAsync(cancellationToken);
         }
-
         public async Task CommitTransactionAsync(CancellationToken cancellationToken)
         {
             if (transaction is null)
@@ -34,8 +33,6 @@ namespace ResourceHub.Infrastructure.UOW
             await transaction.DisposeAsync();
             transaction = null;
         }
-
-
         public async Task RollBackTransactionAsync(CancellationToken cancellationToken)
         {
             if (transaction is null)

@@ -16,7 +16,6 @@ namespace ResourceHub.Application.Extenions
 
             return services;
         }
-        
         private static IServiceCollection AddMediator(this IServiceCollection services, Assembly assembly)
         {
             services.AddScoped<IMediator, Mediator>();

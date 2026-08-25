@@ -44,15 +44,16 @@ namespace ResourceHub.Infrastructure.Services
                         (double)result.TotalCount / pageSize);
                 }
 
-
                 foreach (var dto in result.Items)
                 {
+                    #region Remove Duplications Explaining
                     // Skip duplicates already in DB or previous pages
                     // we create Hashset that contains all activity numbers so it holds only unique activity numbers 
                     // if there are any duplicate activity no it won't be saved into the hashset cause it can't include any duplicates
                     // so when we try to add a new item we first try to add its activityNo into this hashset 
                     // if it's added it means it's not repeated before so we can add this record into our table 
                     // else it means it's duplicated so we can't add it into our table.
+                    #endregion
 
                     if (!existingActivityNos.Add(dto.ActivityNo))
                         continue;

@@ -6,5 +6,4 @@ namespace ResourceHub.Application.CQRS.Query
     public record GetServicesWithFiltersQuery(
       SearchFilter SearchFilterType
         ):IQueryRequest<PaginatedResultDto<ServiceResponseDto>>;
-    
 }

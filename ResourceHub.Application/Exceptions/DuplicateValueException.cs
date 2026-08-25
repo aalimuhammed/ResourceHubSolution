@@ -8,7 +8,6 @@ namespace ResourceHub.Application.Exceptions
     {
         public DuplicateValueException(string message):base(message)
         {
-            
         }
     }
 }
